@@ -1,0 +1,22 @@
+{
+  "name": "antharuu/velvet",
+  "description": "Modern and simple template engine",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Antharuu\\": "src/"
+    },
+    "files": [
+      "functions.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "antharuu",
+      "email": "antho.eclips@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {}
+}

@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap');
+
+body {
+    background-color: #212121;
+}
+
+#title {
+    color: #bb1c1c;
+    font-family: 'Oleo Script Swash Caps', cursive;
+    font-size: 5rem;
+    text-align: center;
+    position: relative;
+}
+
+#title > span{
+    font-size: 1.5rem;
+    position: absolute;
+    right: 1rem;
+    opacity: .6;
+}
+
+#codes {
+    width: 100%;
+    display: flex;
+}
+
+#codes pre {
+    margin: .5rem;
+    width: 100%;
+}
