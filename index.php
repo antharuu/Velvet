@@ -6,6 +6,7 @@ require_once "vendor/autoload.php";
 
 $V = new Velvet();
 
+$V::$Default_path = "Tests";
 $File = $V->parse_file("test", "Tests");
 
 ?>
@@ -22,10 +23,14 @@ $File = $V->parse_file("test", "Tests");
     <script src="js/prism.js" defer></script>
 </head>
 <body>
-<div id="title">Velvet<span class="version">0.1 Alpha</span></div>
+<div id="title">Velvet<span class="version">0.7 Alpha</span></div>
 <div id="codes">
-    <pre><code class="language-pug"><?= file_get_contents("Tests/test.vlvt") ?></code></pre>
-    <pre><code class="language-html"><?= htmlentities($File) ?></code></pre>
+    <div class="codebox">
+        <pre><code class="language-pug"><?= htmlentities(file_get_contents("Tests/test.vlvt")) ?></code></pre>
+    </div>
+    <div class="codebox">
+        <pre><code class="language-html"><?= htmlentities($File) ?></code></pre>
+    </div>
 </div>
 </body>
 </html>

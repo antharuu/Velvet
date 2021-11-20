@@ -2,7 +2,7 @@
 
 namespace Antharuu\Velvet\Elements;
 
-use JetBrains\PhpStorm\Pure;
+use Antharuu\Velvet;
 
 class HtmlElement
 {
@@ -11,22 +11,106 @@ class HtmlElement
     public string $content = "";
     public int $indent = 0;
     public array $attributes = [];
+    public array $block = [];
+    public array $selfClose = [
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr",
+        "command",
+        "keygen",
+        "menuitem"
+    ];
+    public array $paterns = [
+        "include",
+        "code" => "?",
+        "echo" => "="
+    ];
 
-    #[Pure] public function getHtml(): string
+    public function getHtml($force = false, $noTag = false): string
     {
-        return $this->indent()
-            . "<{$this->tag}{$this->getAttributes()}>"
-            . $this->content
-            . "</{$this->tag}>";
+
+        if (!$force) {
+            if (get_class($this) === "Antharuu\Velvet\Elements\HtmlElement") {
+                if (in_array($this->tag, $this->paterns)) return $this->paternInit();
+            }
+        }
+
+        $Html = "";
+
+        if ($this->tag !== "|" && !$noTag) {
+            $Html .= "<{$this->tag}{$this->getAttributes()}";
+            $Html .= in_array($this->tag, $this->selfClose) ? "/>" : ">";
+        }
+
+        if (!in_array($this->tag, $this->selfClose)) {
+            $Html .= $this->content;
+            if (count($this->block) > 0) {
+                $P = new Velvet();
+                $Html .= $P->parse(implode("\n", $this->block));
+            }
+
+            if ($this->tag !== "|" && !$noTag) $Html .= "</{$this->tag}>";
+        }
+
+        return $Html;
     }
 
-    private function indent(int $addedIndent = 0): string
+    private function paternInit(): string
     {
-        return str_repeat("    ", $this->indent + $addedIndent);
+        $class = $this->tag;
+        foreach ($this->paterns as $p => $v) {
+            if (!is_int($p) && $v === $this->tag) $class = $p;
+        }
+
+        $Code = $this
+            ->castAs("Antharuu\Velvet\Elements\\" . ucfirst($class) . "Element")
+            ->getPatern();
+        if (is_string($Code)) return $Code;
+        return "";
     }
 
-    public function setAttribute(string $attributeName, string|array|null $values): void
+    protected function castAs($newClass)
     {
+        $obj = new $newClass;
+        foreach (get_object_vars($this) as $key => $name) {
+            $obj->$key = $name;
+        }
+        return $obj;
+    }
+
+    private function getAttributes(): string
+    {
+        $Attributes = "";
+        ksort($this->attributes);
+
+
+        foreach ($this->attributes as $attr => $values) {
+            $Attributes .= " $attr";
+            if (!is_null($values) && count($values) > 0) {
+                $Attributes .= "=\"";
+                $vals = implode(' ', $values);
+                $Attributes .= trim($vals) . "\"";
+            }
+        }
+
+        return $Attributes;
+    }
+
+    public
+    function setAttribute(string $attributeName, string|array|null $values): void
+    {
+
         if ($values !== null) {
             if (!is_array($values)) {
                 if (strlen(trim($values)) > 0) $values = [$values];
@@ -35,25 +119,21 @@ class HtmlElement
             if (is_array($values)) {
                 foreach ($values as $value) {
                     if (strlen(trim($value)) > 0 && is_string($value)) {
-                        $this->attributes[$attributeName][] = $value;
+                        $this->attributes[$attributeName][$this->removeBraces($value)] = $this->removeBraces($value);
                     }
                 }
             }
-        }
+        } else $this->attributes[$attributeName] = null;
     }
 
-    private function getAttributes(): string
+    private
+    function removeBraces(string $value): string
     {
-        $Attributes = "";
-
-        foreach ($this->attributes as $attr => $values) {
-            if (count($values) > 0) {
-                $Attributes .= " $attr=\"";
-                $vals = implode(' ', $values);
-                $Attributes .= trim($vals) . "\"";
-            }
+        if ((str_starts_with($value, '"') && str_ends_with($value, '"')) ||
+            (str_starts_with($value, "'") && str_ends_with($value, "'"))) {
+            return substr(substr($value, 1), 0, -1);
         }
 
-        return $Attributes;
+        return $value;
     }
 }

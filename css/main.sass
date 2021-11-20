@@ -1,0 +1,39 @@
+$primary: #bb1c1c
+$dark: #212121
+
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap')
+
+body
+  background-color: #212121
+
+#title
+  color: $primary
+  font-family: 'Oleo Script Swash Caps', cursive
+  font-size: 6rem
+  text-align: center
+  position: relative
+  text-shadow: 4px 3px 0 transparentize(darken($primary, 10), .5), 6px 6px 6px transparentize(darken($primary, 30), .5)
+
+  & > span
+    font-size: 1.5rem
+    position: absolute
+    right: 1rem
+    opacity: .6
+    text-shadow: none
+
+#codes
+  display: flex
+  flex-direction: column
+  width: 100%
+
+  .codebox
+    width: 100%
+
+  pre
+    margin: .5rem
+    overflow: hidden
+    font-family: "Fira code", monospace !important
+
+    code
+      display: block
+      width: 100%

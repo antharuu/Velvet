@@ -2,9 +2,21 @@
 
 use JetBrains\PhpStorm\NoReturn;
 
-#[NoReturn] function dd($data)
+#[NoReturn] function dd(...$data)
 {
-    highlight_string("<?php\n " . var_export($data, true) . "?>");
-    echo '<script>document.getElementsByTagName("code")[0].getElementsByTagName("span")[1].remove() ;document.getElementsByTagName("code")[0].getElementsByTagName("span")[document.getElementsByTagName("code")[0].getElementsByTagName("span").length - 1].remove() ; </script>';
+    echo "<link rel='stylesheet' href='css/prism.css'>";
+    foreach ($data as $d):
+        vd($d);
+    endforeach;
+    echo "<script src='js/prism.js'></script>";
     die();
+}
+
+function vd(...$data)
+{
+    foreach ($data as $d):
+        echo "<pre class='language-php'><code>";
+        var_dump($d);
+        echo "</code></pre>";
+    endforeach;
 }

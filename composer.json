@@ -18,5 +18,8 @@
     }
   ],
   "minimum-stability": "stable",
-  "require": {}
+  "require": {
+    "php": "^8.0",
+    "gajus/dindent": "^2.0"
+  }
 }
