@@ -1,2 +1,7 @@
-a.link http://velvet.antharuu.fr _blank Enfin un truc du genre quoi
-    img.icon images/icons/oui.png Ptete une alt string aussi
+ul
+    ? $i = 1;
+    for 88
+        if $index > 43 && $index % 2
+            li
+                a http://antharuu.fr/$index/$i Oui c'est la variable {{'$value'}} !
+                ? $i++;

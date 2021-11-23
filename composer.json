@@ -6,10 +6,7 @@
   "autoload": {
     "psr-4": {
       "Antharuu\\": "src/"
-    },
-    "files": [
-      "functions.php"
-    ]
+    }
   },
   "authors": [
     {
@@ -20,6 +17,7 @@
   "minimum-stability": "stable",
   "require": {
     "php": "^8.0",
-    "gajus/dindent": "^2.0"
+    "gajus/dindent": "^2.0",
+    "antharuu/toolbox": "dev-master"
   }
 }

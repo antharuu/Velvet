@@ -23,7 +23,7 @@ $File = $V->parse_file("test", "Tests");
     <script src="js/prism.js" defer></script>
 </head>
 <body>
-<div id="title">Velvet<span class="version">0.7 Alpha</span></div>
+<div id="title">Velvet<span class="version">0.11 Alpha</span></div>
 <div id="codes">
     <div class="codebox">
         <pre><code class="language-pug"><?= htmlentities(file_get_contents("Tests/test.vlvt")) ?></code></pre>

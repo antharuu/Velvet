@@ -17,6 +17,6 @@ class Variables
 
     public static function getGlobals(): array
     {
-        return $GLOBALS['Velvet'];
+        return $GLOBALS['Velvet'] ?? [];
     }
 }

@@ -34,7 +34,9 @@ class HtmlElement
     public array $paterns = [
         "include",
         "code" => "?",
-        "echo" => "="
+        "echo" => "=",
+        "for",
+        "condition" => "if"
     ];
 
     public function getHtml($force = false, $noTag = false): string
@@ -107,8 +109,7 @@ class HtmlElement
         return $Attributes;
     }
 
-    public
-    function setAttribute(string $attributeName, string|array|null $values): void
+    public function setAttribute(string $attributeName, string|array|null $values): void
     {
 
         if ($values !== null) {
@@ -119,19 +120,19 @@ class HtmlElement
             if (is_array($values)) {
                 foreach ($values as $value) {
                     if (strlen(trim($value)) > 0 && is_string($value)) {
-                        $this->attributes[$attributeName][$this->removeBraces($value)] = $this->removeBraces($value);
+                        $value = $this->removeBraces($value);
+                        $this->attributes[$attributeName][$value] = $value;
                     }
                 }
             }
         } else $this->attributes[$attributeName] = null;
     }
 
-    private
-    function removeBraces(string $value): string
+    private function removeBraces(string $value): string
     {
         if ((str_starts_with($value, '"') && str_ends_with($value, '"')) ||
             (str_starts_with($value, "'") && str_ends_with($value, "'"))) {
-            return substr(substr($value, 1), 0, -1);
+            return substr($value, 1, -1);
         }
 
         return $value;

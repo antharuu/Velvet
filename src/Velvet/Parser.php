@@ -47,7 +47,6 @@ class Parser
                 die($e);
             }
         }
-
         return $finalHtmlCode;
     }
 
@@ -159,7 +158,7 @@ class Parser
         foreach (Config::$CustomTags as $class) {
             $C = new $class;
             if ($BlockElement->tag === $C->tag) {
-                $args = explode(" ", $BlockElement->content);
+                $args = explode(" ", Tools::echo($BlockElement->content));
                 $BlockElement = $C->call($args, $BlockElement);
                 $this->getAttributes($BlockElement->content, $BlockElement);
             }

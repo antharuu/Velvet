@@ -23,4 +23,5 @@ class Config
         LinkTag::class,
         ImageTag::class
     ];
+    public static int $InfiniteLoopSecurity = 150;
 }
