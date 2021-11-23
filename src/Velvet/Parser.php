@@ -3,6 +3,7 @@
 namespace Antharuu\Velvet;
 
 use Antharuu\Velvet;
+use Antharuu\Velvet\Elements\ExtendsElement;
 use Antharuu\Velvet\Elements\HtmlElement;
 use ErrorException;
 use Gajus\Dindent\Exception\RuntimeException;
@@ -10,8 +11,9 @@ use Gajus\Dindent\Indenter;
 
 class Parser
 {
+    public static array $blocks = [];
     private string $Regex =
-        "#^( *)(?'tag'[a-zA-Z\_\-\=|$?]{1}[a-zA-Z0-9\_\-]*)?(?'code'=)?(?'content'.*)$#";
+        "#^( *)(?'tag'[a-zA-Z\_\-\=|$?]{1}[a-zA-Z0-9\_\-]*)?(:(?'subtag'[a-zA-Z]+))?(?'code'=)?(?'content'.*)$#";
     private string $RegexIds =
         "#^(?'ids'\#[a-zA-Z0-9\-\_]+)?(?'content'.*)$#";
     private string $RegexClasses =
@@ -20,7 +22,6 @@ class Parser
         "#^(?'attributes'\((?'attr' *([a-zA-Z0-9\-]+(\=(\\\".*\\\"|\'.*\')|\=\\$\S+)? *)*)\))?(?'content'.*)$#";
     private string $RegexSubAttributes =
         "#((?'attribute'[\w-]+)(=(?'value'\"[\w\d\s\v\@\?\!\-\_\\.:\>\<\(\)\~\&\#\{\}\^\$\'\\\"\/]*\"|\'[\w\d\s\v\@\?\!\.\-\_\:\>\<\(\)\~\&\#\{\}\^\$\\\"\\\/']*\')|=\$\S+)?)+#";
-
     private array $Lines = [];
     private array $HtmlLines = [];
 
@@ -83,15 +84,15 @@ class Parser
             $this->HtmlBaseBuilder($BlockElement, $line);
             $BlockElement->block = $Block;
 
-            $BlockElement = $this->checkCustomTags($BlockElement);
-
+            if (strtolower($BlockElement->tag) === "extends") $BlockElement = $this->layout($BlockElement, $Lines);
+            else $BlockElement = $this->checkCustomTags($BlockElement);
             $BlockIndent = $indent;
 
             $this->HtmlLines[] = $BlockElement->getHtml();
         endwhile;
     }
 
-    private function get_indent(string $line): int
+    private static function get_indent(string $line): int
     {
         return floor((strlen($line) - strlen(ltrim($line))) / Config::$indent_size);
     }
@@ -106,13 +107,14 @@ class Parser
 
         $Content = $matches[0]['content'] ?? "";
 
-
         try {
             $Content = $this->getAttributes($Content, $Element);
             if (!empty(trim($matches[0]['code']))) $Content = $this->getCode($Content, $Element);
         } catch (ErrorException $e) {
             die("<pre><code>$e</code></pre>");
         }
+
+        if (!empty($matches[0]['subtag'])) $Element->subtag = $matches[0]['subtag'];
 
         $Element->content = $Content;
     }
@@ -151,6 +153,44 @@ class Parser
         array_unshift($Element->block, "= " . $Content);
 
         return $Element->getHtml(true, true);
+    }
+
+    private function layout(HtmlElement $oldElement, array $Lines): HtmlElement
+    {
+        $layoutElement = new ExtendsElement();
+
+        $layoutElement->content = $oldElement->content;
+        $layoutElement->block = $Lines;
+
+        $content = Velvet::get_file(trim($layoutElement->content), Config::$Path_templates);
+        $layoutLines = explode("\n", $content);
+
+        $layoutElement->getHtml();
+        $newLines = [];
+        foreach ($layoutLines as $line) {
+            if (str_starts_with(trim($line), "block")) {
+                $blockName = explode(" ", trim($line))[1] ?? null;
+                if ($blockName !== null && isset(Parser::$blocks[$blockName])) {
+                    $indent = self::get_indent($line);
+                    foreach (Parser::$blocks[$blockName] as $blockline) {
+                        $newLines[] = self::indent($indent) . $blockline;
+                    }
+                }
+            } else {
+                $newLines[] = $line;
+            }
+        }
+
+        $layoutElement->tag = "|";
+        $layoutElement->content = "";
+        $layoutElement->block = $newLines;
+
+        return $layoutElement;
+    }
+
+    private static function indent(int $indent): string
+    {
+        return str_repeat(str_repeat(" ", Config::$indent_size), $indent);
     }
 
     private function checkCustomTags(HtmlElement $BlockElement): HtmlElement

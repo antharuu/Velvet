@@ -1,0 +1,23 @@
+extends layout
+
+block body
+    .col-12
+        h1 Bonjour le monde
+        h2 C'est cool en vrai non ?
+
+block footer
+    .container
+        .row
+            .col-4
+                h2
+                    ul
+                        li
+                            a # Link 1
+                        li
+                            a # Link 2
+                        li
+                            a # Link 3
+
+            .col-8
+                p
+                    Bonjour les gens c'était super !!

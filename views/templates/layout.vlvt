@@ -1,0 +1,12 @@
+doctype
+html(lang="en")
+    head
+        meta:charset
+        meta:viewport
+
+        link:css css/main.css
+        link:css css/prism.css
+
+        script:js defer js/prism.js
+
+        title 🎀 Velvet 🎀

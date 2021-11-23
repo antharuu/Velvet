@@ -3,16 +3,20 @@
 namespace Antharuu\Velvet\Elements;
 
 use Antharuu\Velvet;
+use Antharuu\Velvet\Tools;
+use Antharuu\Velvet\Variables;
 
 class HtmlElement
 {
 
     public string $tag = "div";
+    public string $subtag = "";
     public string $content = "";
     public int $indent = 0;
     public array $attributes = [];
     public array $block = [];
     public array $selfClose = [
+        "!DOCTYPE",
         "area",
         "base",
         "br",
@@ -32,6 +36,8 @@ class HtmlElement
         "menuitem"
     ];
     public array $paterns = [
+        "extends",
+        "block",
         "include",
         "code" => "?",
         "echo" => "=",
@@ -111,6 +117,7 @@ class HtmlElement
 
     public function setAttribute(string $attributeName, string|array|null $values): void
     {
+        foreach (Variables::getGlobals() as $var => $____value) $$var = $____value;
 
         if ($values !== null) {
             if (!is_array($values)) {
@@ -121,7 +128,7 @@ class HtmlElement
                 foreach ($values as $value) {
                     if (strlen(trim($value)) > 0 && is_string($value)) {
                         $value = $this->removeBraces($value);
-                        $this->attributes[$attributeName][$value] = $value;
+                        $this->attributes[$attributeName][$value] = Tools::echo($value);
                     }
                 }
             }
