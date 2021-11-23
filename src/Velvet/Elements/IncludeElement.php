@@ -12,7 +12,7 @@ class IncludeElement extends HtmlElement implements ElementInterface
 
         $V = new Velvet();
 
-        $this->content = $V->parse_file(trim($this->content));
+        $this->content = $V->parseFile(trim($this->content));
 
         return $this->getHtml();
     }

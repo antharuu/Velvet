@@ -2,8 +2,6 @@
 
 namespace Antharuu\Velvet\CustomTags;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-
 class ImageTag extends CustomTag implements CustomTagInterface
 {
 
@@ -12,11 +10,9 @@ class ImageTag extends CustomTag implements CustomTagInterface
         return "img";
     }
 
-    public function call(array $args, HtmlElement $BlockElement): HtmlElement
+    public function call()
     {
-        $BlockElement->attributes["src"][] = array_shift($args);
-        $BlockElement->attributes["alt"][] = implode(" ", $args);
-
-        return $this->clear($args, $BlockElement);
+        $this->setAttribute("src", $this->nextArg());
+        $this->setAttribute("alt", $this->nextArgs());
     }
 }

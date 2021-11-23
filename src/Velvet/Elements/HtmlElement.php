@@ -54,24 +54,24 @@ class HtmlElement
             }
         }
 
-        $Html = "";
+        $html = "";
 
         if ($this->tag !== "|" && !$noTag) {
-            $Html .= "<{$this->tag}{$this->getAttributes()}";
-            $Html .= in_array($this->tag, $this->selfClose) ? "/>" : ">";
+            $html .= "<{$this->tag}{$this->getAttributes()}";
+            $html .= in_array($this->tag, $this->selfClose) ? "/>" : ">";
         }
 
         if (!in_array($this->tag, $this->selfClose)) {
-            $Html .= $this->content;
+            $html .= $this->content;
             if (count($this->block) > 0) {
                 $P = new Velvet();
-                $Html .= $P->parse(implode("\n", $this->block));
+                $html .= $P->parse(implode("\n", $this->block));
             }
 
-            if ($this->tag !== "|" && !$noTag) $Html .= "</{$this->tag}>";
+            if ($this->tag !== "|" && !$noTag) $html .= "</{$this->tag}>";
         }
 
-        return $Html;
+        return $html;
     }
 
     private function paternInit(): string
@@ -81,58 +81,55 @@ class HtmlElement
             if (!is_int($p) && $v === $this->tag) $class = $p;
         }
 
-        $Code = $this
+        $code = $this
             ->castAs("Antharuu\Velvet\Elements\\" . ucfirst($class) . "Element")
             ->getPatern();
-        if (is_string($Code)) return $Code;
-        return "";
+        return (is_string($code)) ? $code : "";
     }
 
     protected function castAs($newClass)
     {
         $obj = new $newClass;
-        foreach (get_object_vars($this) as $key => $name) {
-            $obj->$key = $name;
-        }
+        foreach (get_object_vars($this) as $key => $name) $obj->$key = $name;
         return $obj;
     }
 
     private function getAttributes(): string
     {
-        $Attributes = "";
+        $attributes = "";
         ksort($this->attributes);
 
-
         foreach ($this->attributes as $attr => $values) {
-            $Attributes .= " $attr";
+            $attributes .= " $attr";
             if (!is_null($values) && count($values) > 0) {
-                $Attributes .= "=\"";
+                $attributes .= "=\"";
                 $vals = implode(' ', $values);
-                $Attributes .= trim($vals) . "\"";
+                $attributes .= trim($vals) . "\"";
             }
         }
 
-        return $Attributes;
+        return $attributes;
     }
 
-    public function setAttribute(string $attributeName, string|array|null $values): void
+    public function setAttribute(string $attributeName, string|array $values = "", string $defaultValue = ""): void
     {
         foreach (Variables::getGlobals() as $var => $____value) $$var = $____value;
 
-        if ($values !== null) {
-            if (!is_array($values)) {
-                if (strlen(trim($values)) > 0) $values = [$values];
-            }
+        if (is_array($values) && count($values) === 0) $values = $defaultValue;
 
-            if (is_array($values)) {
-                foreach ($values as $value) {
-                    if (strlen(trim($value)) > 0 && is_string($value)) {
-                        $value = $this->removeBraces($value);
-                        $this->attributes[$attributeName][$value] = Tools::echo($value);
-                    }
+        if (!is_array($values)) {
+            $values = !empty($values) ? $values : $defaultValue;
+            if (strlen(trim($values)) > 0) $values = [$values];
+        }
+
+        if (is_array($values)) {
+            foreach ($values as $value) {
+                if (strlen(trim($value)) > 0 && is_string($value)) {
+                    $value = $this->removeBraces($value);
+                    $this->attributes[$attributeName][$value] = Tools::echo($value);
                 }
             }
-        } else $this->attributes[$attributeName] = null;
+        }
     }
 
     private function removeBraces(string $value): string

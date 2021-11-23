@@ -5,28 +5,27 @@ namespace Antharuu\Velvet;
 use Antharuu\Velvet;
 use Antharuu\Velvet\Elements\ExtendsElement;
 use Antharuu\Velvet\Elements\HtmlElement;
-use ErrorException;
 use Gajus\Dindent\Exception\RuntimeException;
 use Gajus\Dindent\Indenter;
 
 class Parser
 {
     public static array $blocks = [];
-    private string $Regex =
+    private string $regex =
         "#^( *)(?'tag'[a-zA-Z\_\-\=|$?]{1}[a-zA-Z0-9\_\-]*)?(:(?'subtag'[a-zA-Z]+))?(?'code'=)?(?'content'.*)$#";
-    private string $RegexIds =
+    private string $regexIds =
         "#^(?'ids'\#[a-zA-Z0-9\-\_]+)?(?'content'.*)$#";
-    private string $RegexClasses =
+    private string $regexClasses =
         "#^(?'classes'\.[a-zA-Z0-9\-\_]+)?(?'content'.*)$#";
-    private string $RegexAttributes =
+    private string $regexAttributes =
         "#^(?'attributes'\((?'attr' *([a-zA-Z0-9\-]+(\=(\\\".*\\\"|\'.*\')|\=\\$\S+)? *)*)\))?(?'content'.*)$#";
-    private string $RegexSubAttributes =
+    private string $regexSubAttributes =
         "#((?'attribute'[\w-]+)(=(?'value'\"[\w\d\s\v\@\?\!\-\_\\.:\>\<\(\)\~\&\#\{\}\^\$\'\\\"\/]*\"|\'[\w\d\s\v\@\?\!\.\-\_\:\>\<\(\)\~\&\#\{\}\^\$\\\"\\\/']*\')|=\$\S+)?)+#";
-    private array $Lines = [];
-    private array $HtmlLines = [];
+    private array $lines = [];
+    private array $htmlLines = [];
 
     public function __construct(
-        public Velvet $VelvetInstance
+        public Velvet $velvetInstance
     )
     {
 
@@ -34,13 +33,13 @@ class Parser
 
     public function transform(string $vlvtCode): string
     {
-        $this->Lines = explode("\n", $vlvtCode);
+        $this->lines = explode("\n", $vlvtCode);
         $this->cleanupLines();
-        $this->htmlConverter($this->Lines);
+        $this->htmlConverter($this->lines);
 
-        $finalHtmlCode = implode("", $this->HtmlLines);
+        $finalHtmlCode = implode("", $this->htmlLines);
 
-        if (Config::$Beautify) {
+        if (Config::$beautify) {
             $indenter = new Indenter();
             try {
                 $finalHtmlCode = str_replace("\n\n", "\n", $indenter->indent($finalHtmlCode));
@@ -55,114 +54,111 @@ class Parser
     {
         $newLines = [];
 
-        foreach ($this->Lines as $line):
+        foreach ($this->lines as $line):
             if (!empty(trim($line))):
                 $newLines[] = $line;
             endif;
         endforeach;
 
-        $this->Lines = $newLines;
+        $this->lines = $newLines;
     }
 
-    private function htmlConverter(array $Lines): void
+    private function htmlConverter(array $lines): void
     {
-        $BlockIndent = 0;
-        $BlockElement = null;
+        $blockIndent = 0;
+        $blockElement = null;
 
-        while (isset($Lines[0])):
-            $line = array_shift($Lines);
+        while (isset($lines[0])):
+            $line = array_shift($lines);
 
-            $indent = $this->get_indent($line);
+            $indent = $this->getIndent($line);
 
             $Block = [];
 
-            while (isset($Lines[0]) && $this->get_indent($Lines[0]) > $BlockIndent):
-                $Block[] = substr(array_shift($Lines), Config::$indent_size);
+            while (isset($lines[0]) && $this->getIndent($lines[0]) > $blockIndent):
+                $Block[] = substr(array_shift($lines), Config::$indentSize);
             endwhile;
 
-            $BlockElement = new HtmlElement();
-            $this->HtmlBaseBuilder($BlockElement, $line);
-            $BlockElement->block = $Block;
+            $blockElement = new HtmlElement();
+            $this->htmlBaseBuilder($blockElement, $line);
+            $blockElement->block = $Block;
 
-            if (strtolower($BlockElement->tag) === "extends") $BlockElement = $this->layout($BlockElement, $Lines);
-            else $BlockElement = $this->checkCustomTags($BlockElement);
-            $BlockIndent = $indent;
+            if (strtolower($blockElement->tag) === "extends") $blockElement = $this->layout($blockElement, $lines);
+            else $blockElement = $this->checkCustomTags($blockElement);
+            $blockIndent = $indent;
 
-            $this->HtmlLines[] = $BlockElement->getHtml();
+            $this->htmlLines[] = $blockElement->getHtml();
         endwhile;
     }
 
-    private static function get_indent(string $line): int
+    private static function getIndent(string $line): int
     {
-        return floor((strlen($line) - strlen(ltrim($line))) / Config::$indent_size);
+        return floor((strlen($line) - strlen(ltrim($line))) / Config::$indentSize);
     }
 
-    private function HtmlBaseBuilder(HtmlElement $Element, $line)
+    private function htmlBaseBuilder(HtmlElement $element, $line)
     {
         $line = ltrim($line);
 
-        $res = preg_match_all(str_replace("\n", "", $this->Regex), $line, $matches, PREG_SET_ORDER, 0);
+        preg_match_all(str_replace("\n", "", $this->regex), $line, $matches, PREG_SET_ORDER, 0);
 
-        if (!empty(trim($matches[0]['tag']))) $Element->tag = trim($matches[0]['tag']) ?? "div";
+        if (!empty(trim($matches[0]['tag']))) $element->tag = trim($matches[0]['tag']) ?? "div";
 
-        $Content = $matches[0]['content'] ?? "";
+        $element->content = $matches[0]['content'] ?? "";
 
-        try {
-            $Content = $this->getAttributes($Content, $Element);
-            if (!empty(trim($matches[0]['code']))) $Content = $this->getCode($Content, $Element);
-        } catch (ErrorException $e) {
-            die("<pre><code>$e</code></pre>");
-        }
+        $content = $this->getAttributes($element);
+        if (!empty(trim($matches[0]['code']))) $content = $this->getCode($content, $element);
+        if (!empty($matches[0]['subtag'])) $element->subtag = $matches[0]['subtag'];
 
-        if (!empty($matches[0]['subtag'])) $Element->subtag = $matches[0]['subtag'];
-
-        $Element->content = $Content;
+        $element->content = $content;
     }
 
-    private function getAttributes(string $Content, HtmlElement $Element): string
+    private function getAttributes(HtmlElement $element): string
     {
+        $content = $element->content;
+
         $securityIteration = 0;
-        while (!str_starts_with($Content, " ") && strlen(trim($Content)) > 0) {
-            preg_match_all(str_replace("\n", "", $this->RegexIds), $Content, $matchesIds, PREG_SET_ORDER, 0);
-            preg_match_all(str_replace("\n", "", $this->RegexClasses), $Content, $matchesClasses, PREG_SET_ORDER, 0);
-            preg_match_all(str_replace("\n", "", $this->RegexAttributes), $Content, $matchesAttributes, PREG_SET_ORDER, 0);
+        while (!str_starts_with($content, " ") && strlen(trim($content)) > 0) {
+            preg_match_all($this->regexIds, $content, $matchesIds, PREG_SET_ORDER);
+            preg_match_all($this->regexClasses, $content, $matchesClasses, PREG_SET_ORDER);
+            preg_match_all($this->regexAttributes, $content, $matchesAttributes, PREG_SET_ORDER);
 
             if (isset($matchesIds[0]['ids']) && strlen(trim($matchesIds[0]['ids'])) > 0) {
-                $Element->setAttribute("id", explode("#", $matchesIds[0]['ids']));
-                $Content = $matchesIds[0]['content'];
+                $element->setAttribute("id", explode("#", $matchesIds[0]['ids']));
+                $content = $matchesIds[0]['content'];
             } elseif (isset($matchesClasses[0]['classes']) && strlen(trim($matchesClasses[0]['classes'])) > 0) {
-                $Element->setAttribute("class", explode(".", $matchesClasses[0]['classes']));
-                $Content = $matchesClasses[0]['content'];
+                $element->setAttribute("class", explode(".", $matchesClasses[0]['classes']));
+                $content = $matchesClasses[0]['content'];
             } elseif (isset($matchesAttributes[0]['attributes']) && strlen(trim($matchesAttributes[0]['attributes'])) > 0) {
-                preg_match_all(str_replace("\n", "", $this->RegexSubAttributes), $matchesAttributes[0]['attributes'], $matchesSubAttributes, PREG_SET_ORDER, 0);
-                foreach ($matchesSubAttributes as $A) $Element->setAttribute($A['attribute'], $A['value'] ?? null);
-                $Content = $matchesAttributes[0]['content'];
+                preg_match_all(str_replace("\n", "", $this->regexSubAttributes), $matchesAttributes[0]['attributes'], $matchesSubAttributes, PREG_SET_ORDER, 0);
+                foreach ($matchesSubAttributes as $a) $element->setAttribute($a['attribute'], $a['value'] ?? null);
+                $content = $matchesAttributes[0]['content'];
             }
 
-            if ($securityIteration === 1000) dd("This tag is unknown:\n" . $Content);
+            if ($securityIteration === 1000) dd("Oops an error in the attributes:\n" . $content);
             $securityIteration++;
         }
 
-        return substr($Content, 1);
+        return substr($content, 1);
     }
 
-    private function getCode(string $Content, HtmlElement $Element): string
+    private function getCode(string $content, HtmlElement $element): string
     {
-        $Element->content = "";
+        $element->content = "";
 
-        array_unshift($Element->block, "= " . $Content);
+        array_unshift($element->block, "= " . $content);
 
-        return $Element->getHtml(true, true);
+        return $element->getHtml(true, true);
     }
 
-    private function layout(HtmlElement $oldElement, array $Lines): HtmlElement
+    private function layout(HtmlElement $oldElement, array $lines): HtmlElement
     {
         $layoutElement = new ExtendsElement();
 
         $layoutElement->content = $oldElement->content;
-        $layoutElement->block = $Lines;
+        $layoutElement->block = $lines;
 
-        $content = Velvet::get_file(trim($layoutElement->content), Config::$Path_templates);
+        $content = Velvet::getFile(trim($layoutElement->content), Config::$templatePath);
         $layoutLines = explode("\n", $content);
 
         $layoutElement->getHtml();
@@ -171,7 +167,7 @@ class Parser
             if (str_starts_with(trim($line), "block")) {
                 $blockName = explode(" ", trim($line))[1] ?? null;
                 if ($blockName !== null && isset(Parser::$blocks[$blockName])) {
-                    $indent = self::get_indent($line);
+                    $indent = self::getIndent($line);
                     foreach (Parser::$blocks[$blockName] as $blockline) {
                         $newLines[] = self::indent($indent) . $blockline;
                     }
@@ -190,20 +186,21 @@ class Parser
 
     private static function indent(int $indent): string
     {
-        return str_repeat(str_repeat(" ", Config::$indent_size), $indent);
+        return str_repeat(str_repeat(" ", Config::$indentSize), $indent);
     }
 
-    private function checkCustomTags(HtmlElement $BlockElement): HtmlElement
+    private function checkCustomTags(HtmlElement $element): HtmlElement
     {
-        foreach (Config::$CustomTags as $class) {
-            $C = new $class;
-            if ($BlockElement->tag === $C->tag) {
-                $args = explode(" ", Tools::echo($BlockElement->content));
-                $BlockElement = $C->call($args, $BlockElement);
-                $this->getAttributes($BlockElement->content, $BlockElement);
+        foreach (Config::$customTags as $class) {
+            $C = new $class($element);
+            if ($element->tag === $C->tag) {
+                $C->args = explode(" ", Tools::echo($element->content));
+                $C->call();
+                $C->clear();
+                $this->getAttributes($C->element);
             }
         }
 
-        return $BlockElement;
+        return $element;
     }
 }

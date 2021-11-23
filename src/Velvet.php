@@ -2,30 +2,30 @@
 
 namespace Antharuu;
 
+use Antharuu\Velvet\Config;
 use Antharuu\Velvet\Parser;
 use Antharuu\Velvet\Variables;
-use JetBrains\PhpStorm\Pure;
 
 class Velvet extends Velvet\Config
 {
     private Parser|null $Parser = null;
 
-    #[Pure] public function __construct($variables = [])
+    public function __construct($variables = [])
     {
         Variables::setGlobals($variables);
         $this->Parser = new Parser($this);
     }
 
-    public function parse_file(string $fileName, string $filePath = null): string|null
+    public function parseFile(string $fileName, string $filePath = null): string|null
     {
-        $content = self::get_file($fileName);
+        $content = self::getFile($fileName);
 
         return $content !== null ? $this->parse($content) : null;
     }
 
-    public static function get_file(string $fileName, string $filePath = null): string|null
+    public static function getFile(string $fileName, string $filePath = null): string|null
     {
-        $currentPath = $filePath ?? self::$Path_views;
+        $currentPath = $filePath ?? self::$viewPath;
         $currentFile = $currentPath . DIRECTORY_SEPARATOR . self::addExt($fileName);
 
         if (file_exists($currentFile)) {
@@ -40,7 +40,7 @@ in the \"<code>" . $currentPath . "</code>\" folder.";
 
     public static function addExt(string $fileName): string
     {
-        if (substr($fileName, -5) !== "." . self::$Ext) $fileName .= "." . self::$Ext;
+        if (substr($fileName, -5) !== "." . self::$extFile) $fileName .= "." . self::$extFile;
 
         return $fileName;
     }
@@ -48,6 +48,11 @@ in the \"<code>" . $currentPath . "</code>\" folder.";
     public function parse(string $string): string
     {
         return $this->Parser->transform($string);
+    }
+
+    public function customTagsRegister(array $tagsClass)
+    {
+        foreach ($tagsClass as $tag) Config::$customTags[] = $tag;
     }
 
 

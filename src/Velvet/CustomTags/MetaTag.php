@@ -2,8 +2,6 @@
 
 namespace Antharuu\Velvet\CustomTags;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-
 class MetaTag extends CustomTag implements CustomTagInterface
 {
 
@@ -12,36 +10,21 @@ class MetaTag extends CustomTag implements CustomTagInterface
         return "meta";
     }
 
-    public function call(array $args, HtmlElement $BlockElement): HtmlElement
+    public function call()
     {
-        switch ($BlockElement->subtag) {
-            case "charset":
-                $BlockElement = $this->charset($args, $BlockElement);
-                break;
-            case "viewport":
-                $BlockElement = $this->viewport($args, $BlockElement);
-                break;
-            default;
-        }
-
-        return $BlockElement;
+        $i = $this->element->subtag;
+        if ($i == "charset") $this->charset();
+        elseif ($i == "viewport") $this->viewport();
     }
 
-    private function charset(array $args, HtmlElement $BlockElement): HtmlElement
+    private function charset()
     {
-        $charset = !empty($args[0]) ? $args[0] : "UTF-8";
-        $BlockElement->setAttribute("charset", $charset);
-
-        return $this->clear($args, $BlockElement);
+        $this->setAttribute("charset", $this->nextArg(), "UTF-8");
     }
 
-    private function viewport(array $args, HtmlElement $BlockElement): HtmlElement
+    private function viewport()
     {
-        $content = !empty($args[0]) ? $args[0] : "width=device-width, initial-scale=1.0";
-
-        $BlockElement->setAttribute("name", "charset");
-        $BlockElement->setAttribute("content", $content);
-
-        return $this->clear($args, $BlockElement);
+        $this->setAttribute("name", "charset");
+        $this->setAttribute("content", $this->nextArg(), "width=device-width, initial-scale=1.0");
     }
 }

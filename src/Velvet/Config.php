@@ -2,25 +2,20 @@
 
 namespace Antharuu\Velvet;
 
-use Antharuu\Velvet\CustomTags\DoctypeTag;
-use Antharuu\Velvet\CustomTags\HeaderLinkTag;
-use Antharuu\Velvet\CustomTags\ImageTag;
-use Antharuu\Velvet\CustomTags\LinkTag;
-use Antharuu\Velvet\CustomTags\MetaTag;
-use Antharuu\Velvet\CustomTags\ScriptTag;
+use Antharuu\Velvet\CustomTags\{DoctypeTag, HeaderLinkTag, ImageTag, LinkTag, MetaTag, ScriptTag};
 
 class Config
 {
-    public static bool $Beautify = true;
+    public static bool $beautify = true;
 
-    public static int $indent_size = 4;
+    public static int $indentSize = 4;
 
-    public static string $Path_views = "views";
-    public static string $Path_templates = "views/templates";
+    public static string $viewPath = "views";
+    public static string $templatePath = "views/templates";
 
-    public static string $Ext = "vlvt";
+    public static string $extFile = "vlvt";
 
-    public static array $CustomTags = [
+    public static array $customTags = [
         DoctypeTag::class,
         MetaTag::class,
         HeaderLinkTag::class,
@@ -28,5 +23,5 @@ class Config
         LinkTag::class,
         ImageTag::class,
     ];
-    public static int $InfiniteLoopSecurity = 150;
+    public static int $infiniteLoopSecurity = 150;
 }

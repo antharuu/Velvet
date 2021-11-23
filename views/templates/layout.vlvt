@@ -10,3 +10,5 @@ html(lang="en")
         script:js defer js/prism.js
 
         title 🎀 Velvet 🎀
+    body
+        block body

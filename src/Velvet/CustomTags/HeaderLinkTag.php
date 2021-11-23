@@ -2,8 +2,6 @@
 
 namespace Antharuu\Velvet\CustomTags;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-
 class HeaderLinkTag extends CustomTag implements CustomTagInterface
 {
 
@@ -12,15 +10,12 @@ class HeaderLinkTag extends CustomTag implements CustomTagInterface
         return "link";
     }
 
-    public function call(array $args, HtmlElement $BlockElement): HtmlElement
+    public function call()
     {
-        if ($BlockElement->subtag === "css") $BlockElement->subtag = "stylesheet";
+        if ($this->element->subtag === "css") $this->element->subtag = "stylesheet";
 
-        $href = !empty($args[0]) ? $args[0] : "#";
-        $BlockElement->setAttribute("rel", $BlockElement->subtag);
-        $BlockElement->setAttribute("href", $href);
-
-        return $this->clear($args, $BlockElement);
+        $this->setAttribute("rel", $this->element->subtag);
+        $this->setAttribute("href", $this->nextArg(), "#");
     }
 
 }

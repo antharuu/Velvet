@@ -2,8 +2,6 @@
 
 namespace Antharuu\Velvet\CustomTags;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-
 class DoctypeTag extends CustomTag implements CustomTagInterface
 {
 
@@ -12,10 +10,9 @@ class DoctypeTag extends CustomTag implements CustomTagInterface
         return "doctype";
     }
 
-    public function call(array $args, HtmlElement $BlockElement): HtmlElement
+    public function call()
     {
-        $BlockElement->tag = "!DOCTYPE";
-        $BlockElement->attributes["html"] = [];
-        return $this->clear($args, $BlockElement);
+        $this->element->tag = "!DOCTYPE";
+        $this->setAttribute("html");
     }
 }

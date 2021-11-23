@@ -2,8 +2,6 @@
 
 namespace Antharuu\Velvet\CustomTags;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-
 class LinkTag extends CustomTag implements CustomTagInterface
 {
 
@@ -12,14 +10,12 @@ class LinkTag extends CustomTag implements CustomTagInterface
         return "a";
     }
 
-    public function call(array $args, HtmlElement $BlockElement): HtmlElement
+    public function call()
     {
+        $this->setAttribute("href", $this->nextArg(), "#");
 
-        $BlockElement->attributes['href'][] = (isset($args[0]) && strlen(trim($args[0]))) ? array_shift($args) : "#";
-
-        $target = (isset($args[0]) && str_starts_with($args[0], "_")) ? array_shift($args) : null;
-        if (!is_null($target) && !empty(trim($target))) $BlockElement->attributes['target'][] = $target;
-
-        return $this->clear($args, $BlockElement);
+        if (str_starts_with($this->nextArgValue(), "_")) {
+            $this->setAttribute("target", $this->nextArg());
+        }
     }
 }

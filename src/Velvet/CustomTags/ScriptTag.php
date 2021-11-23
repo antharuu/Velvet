@@ -2,8 +2,6 @@
 
 namespace Antharuu\Velvet\CustomTags;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-
 class ScriptTag extends CustomTag implements CustomTagInterface
 {
 
@@ -12,20 +10,20 @@ class ScriptTag extends CustomTag implements CustomTagInterface
         return "script";
     }
 
-    public function call(array $args, HtmlElement $BlockElement): HtmlElement
+    public function call()
     {
-        if ($BlockElement->subtag === "js") $BlockElement->subtag = "text/javascript";
+        if ($this->element->subtag === "js") $this->element->subtag = "text/javascript";
 
-        if (trim($args[0]) === "defer") {
-            array_shift($args);
-            $BlockElement->attributes["defer"] = [];
-        }
+        $this->subtagReplace(["js", "javascript"], "text/javascript");
 
-        $href = !empty($args[0]) ? $args[0] : "#";
-        $BlockElement->setAttribute("type", $BlockElement->subtag);
-        $BlockElement->setAttribute("src", $href);
+        $this->nextArgAction("defer", function () {
+            $this->setAttribute("defer");
+        });
 
-        return $this->clear($args, $BlockElement);
+        $this->setAttribute("type", $this->element->subtag);
+        $this->setAttribute("src", $this->nextArg(), "#");
+
+        $this->element->content = "";
+        $this->element->block = [];
     }
-
 }
