@@ -2,10 +2,10 @@
 
 ## For 1.0
 
-- [ ] Else & Elseif _(I completely forgot)_
+- [x] Else & Elseif _(I completely forgot)_
 - [x] Make custom tags easier to create
 - [x] Make filters
-- [ ] Make **Velvet** easier to use and understandable.
+- [x] Make **Velvet** easier to use and understandable.
 - [ ] Make the documentation
 - [ ] Create a tool for online testing
 

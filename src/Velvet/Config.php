@@ -32,4 +32,37 @@ class Config
         UpperFilter::class,
         LowerFilter::class,
     ];
+
+    public static array $selfClose = [
+        "!DOCTYPE",
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr",
+        "command",
+        "keygen",
+        "menuitem"
+    ];
+    public static array $elementsPaterns = [
+        "extends",
+        "block",
+        "include",
+        "?" => "code",
+        "=" => "echo",
+        "for",
+        "if" => "condition",
+        "else" => "condition",
+        "elseif" => "condition",
+        "else if" => "condition",
+    ];
 }

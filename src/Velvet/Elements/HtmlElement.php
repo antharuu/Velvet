@@ -2,7 +2,8 @@
 
 namespace Antharuu\Velvet\Elements;
 
-use Antharuu\Velvet;
+use Antharuu\Velvet\Config;
+use Antharuu\Velvet\Parser;
 use Antharuu\Velvet\Tools;
 use Antharuu\Velvet\Variables;
 
@@ -16,42 +17,12 @@ class HtmlElement
     public array $attributes = [];
     public array $filters = [];
     public array $block = [];
-    public array $selfClose = [
-        "!DOCTYPE",
-        "area",
-        "base",
-        "br",
-        "col",
-        "embed",
-        "hr",
-        "img",
-        "input",
-        "link",
-        "meta",
-        "param",
-        "source",
-        "track",
-        "wbr",
-        "command",
-        "keygen",
-        "menuitem"
-    ];
-    public array $paterns = [
-        "extends",
-        "block",
-        "include",
-        "code" => "?",
-        "echo" => "=",
-        "for",
-        "condition" => "if"
-    ];
 
     public function getHtml($force = false, $noTag = false): string
     {
-
         if (!$force) {
             if (get_class($this) === "Antharuu\Velvet\Elements\HtmlElement") {
-                if (in_array($this->tag, $this->paterns)) return $this->paternInit();
+                if (isset(Config::$elementsPaterns[$this->tag]) || in_array($this->tag, Config::$elementsPaterns)) return $this->paternInit();
             }
         }
 
@@ -59,14 +30,14 @@ class HtmlElement
 
         if ($this->tag !== "|" && !$noTag) {
             $html .= "<{$this->tag}{$this->getAttributes()}";
-            $html .= in_array($this->tag, $this->selfClose) ? "/>" : ">";
+            $html .= in_array($this->tag, Config::$selfClose) ? "/>" : ">";
         }
 
-        if (!in_array($this->tag, $this->selfClose)) {
+        if (!in_array($this->tag, Config::$selfClose)) {
             $html .= $this->content;
             if (count($this->block) > 0) {
-                $P = new Velvet();
-                $html .= $P->parse(implode("\n", $this->block));
+                $P = new Parser();
+                $html .= $P->transform(implode("\n", $this->block), $this->indent + 1);
             }
 
             if ($this->tag !== "|" && !$noTag) $html .= "</{$this->tag}>";
@@ -78,7 +49,7 @@ class HtmlElement
     private function paternInit(): string
     {
         $class = $this->tag;
-        foreach ($this->paterns as $p => $v) {
+        foreach (Config::$elementsPaterns as $v => $p) {
             if (!is_int($p) && $v === $this->tag) $class = $p;
         }
 

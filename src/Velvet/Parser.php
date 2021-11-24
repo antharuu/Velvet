@@ -11,6 +11,7 @@ use Gajus\Dindent\Indenter;
 class Parser
 {
     public static array $blocks = [];
+    public static array $ifs = [];
     private string $regex =
         "#^( *)(?'tag'[a-zA-Z\_\-\=|$?]{1}[a-zA-Z0-9\_\-]*)?(:(?'subtag'[a-zA-Z]+))?(?'code'=)?(?'content'.*)$#";
     private string $regexIds =
@@ -27,17 +28,17 @@ class Parser
     private array $htmlLines = [];
 
     public function __construct(
-        public Velvet $velvetInstance
+        public ?Velvet $velvetInstance = null
     )
     {
 
     }
 
-    public function transform(string $vlvtCode): string
+    public function transform(string $vlvtCode, $indent = 0): string
     {
         $this->lines = explode("\n", $vlvtCode);
         $this->cleanupLines();
-        $this->htmlConverter($this->lines);
+        $this->htmlConverter($this->lines, $indent);
 
         $finalHtmlCode = implode("", $this->htmlLines);
 
@@ -65,19 +66,16 @@ class Parser
         $this->lines = $newLines;
     }
 
-    private function htmlConverter(array $lines): void
+    public function htmlConverter(array $lines, int $blockIndent = 0): void
     {
-        $blockIndent = 0;
         $blockElement = null;
 
         while (isset($lines[0])):
             $line = array_shift($lines);
 
-            $indent = $this->getIndent($line);
-
             $Block = [];
 
-            while (isset($lines[0]) && $this->getIndent($lines[0]) > $blockIndent):
+            while (isset($lines[0]) && $this->getIndent($lines[0], $blockIndent) > $blockIndent):
                 $Block[] = substr(array_shift($lines), Config::$indentSize);
             endwhile;
 
@@ -85,21 +83,23 @@ class Parser
             $this->htmlBaseBuilder($blockElement, $line);
             $blockElement->block = $Block;
 
-            $blockElement = $this->inlineNesting($blockElement);
+            $this->cleanIfs($blockIndent);
 
             if (strtolower($blockElement->tag) === "extends") $blockElement = $this->layout($blockElement, $lines);
-            else $blockElement = $this->checkCustomTags($blockElement);
-            $blockIndent = $indent;
-
-            $blockElement = $this->applyFilters($blockElement);
+            else {
+                $blockElement = $this->inlineNesting($blockElement);
+                $blockElement = $this->checkCustomTags($blockElement);
+                $blockElement = $this->applyFilters($blockElement);
+                $blockElement->indent = $blockIndent;
+            }
 
             $this->htmlLines[] = $blockElement->getHtml();
         endwhile;
     }
 
-    private static function getIndent(string $line): int
+    private static function getIndent(string $line, int $blockIndent = 0): int
     {
-        return floor((strlen($line) - strlen(ltrim($line))) / Config::$indentSize);
+        return (floor((strlen($line) - strlen(ltrim($line))) / Config::$indentSize)) + $blockIndent;
     }
 
     private function htmlBaseBuilder(HtmlElement $element, $line)
@@ -146,7 +146,7 @@ class Parser
                 $content = $matchesAttributes[0]['content'];
             }
 
-            if ($securityIteration === 1000) dd("Oops an error in the attributes:\n" . $content);
+            if ($securityIteration === 1000) dd("Oops an error in the attributes: " . $content);
             $securityIteration++;
         }
 
@@ -174,22 +174,11 @@ class Parser
         return $element->getHtml(true, true);
     }
 
-    private function inlineNesting(HtmlElement $blockElement): HtmlElement
+    private function cleanIfs(int $blockIndent)
     {
-        if (!empty(trim($blockElement->content)) && str_starts_with(trim($blockElement->content), ">")) {
-            $newBlock = [];
-            foreach ($blockElement->block as $b) $newBlock[] = Parser::indent(1) . $b;
-            array_unshift($newBlock, substr(ltrim($blockElement->content), 1));
-            $blockElement->content = "";
-            $blockElement->block = $newBlock;
-        }
-
-        return $blockElement;
-    }
-
-    private static function indent(int $indent): string
-    {
-        return str_repeat(str_repeat(" ", Config::$indentSize), $indent);
+        $newIfs = [];
+        foreach (self::$ifs as $indent => $if) if ($indent <= $blockIndent) $newIfs[$indent] = $if;
+        self::$ifs = $newIfs;
     }
 
     private function layout(HtmlElement $oldElement, array $lines): HtmlElement
@@ -209,8 +198,8 @@ class Parser
                 $blockName = explode(" ", trim($line))[1] ?? null;
                 if ($blockName !== null && isset(Parser::$blocks[$blockName])) {
                     $indent = self::getIndent($line);
-                    foreach (Parser::$blocks[$blockName] as $blockline) {
-                        $newLines[] = self::indent($indent) . $blockline;
+                    foreach (Parser::$blocks[$blockName] as $blockLine) {
+                        $newLines[] = self::indent($indent) . $blockLine;
                     }
                 }
             } else {
@@ -223,6 +212,24 @@ class Parser
         $layoutElement->block = $newLines;
 
         return $layoutElement;
+    }
+
+    private static function indent(int $indent): string
+    {
+        return str_repeat(str_repeat(" ", Config::$indentSize), $indent);
+    }
+
+    private function inlineNesting(HtmlElement $blockElement): HtmlElement
+    {
+        if (!empty(trim($blockElement->content)) && str_starts_with(trim($blockElement->content), ">")) {
+            $newBlock = [];
+            foreach ($blockElement->block as $b) $newBlock[] = Parser::indent(1) . $b;
+            array_unshift($newBlock, substr(ltrim($blockElement->content), 1));
+            $blockElement->content = "";
+            $blockElement->block = $newBlock;
+        }
+
+        return $blockElement;
     }
 
     private function checkCustomTags(HtmlElement $element): HtmlElement
