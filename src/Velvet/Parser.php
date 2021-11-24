@@ -83,6 +83,8 @@ class Parser
             $this->htmlBaseBuilder($blockElement, $line);
             $blockElement->block = $Block;
 
+            $blockElement = $this->inlineNesting($blockElement);
+
             if (strtolower($blockElement->tag) === "extends") $blockElement = $this->layout($blockElement, $lines);
             else $blockElement = $this->checkCustomTags($blockElement);
             $blockIndent = $indent;
@@ -151,6 +153,24 @@ class Parser
         return $element->getHtml(true, true);
     }
 
+    private function inlineNesting(HtmlElement $blockElement): HtmlElement
+    {
+        if (!empty(trim($blockElement->content)) && str_starts_with(trim($blockElement->content), ">")) {
+            $newBlock = [];
+            foreach ($blockElement->block as $b) $newBlock[] = Parser::indent(1) . $b;
+            array_unshift($newBlock, substr(ltrim($blockElement->content), 1));
+            $blockElement->content = "";
+            $blockElement->block = $newBlock;
+        }
+
+        return $blockElement;
+    }
+
+    private static function indent(int $indent): string
+    {
+        return str_repeat(str_repeat(" ", Config::$indentSize), $indent);
+    }
+
     private function layout(HtmlElement $oldElement, array $lines): HtmlElement
     {
         $layoutElement = new ExtendsElement();
@@ -182,11 +202,6 @@ class Parser
         $layoutElement->block = $newLines;
 
         return $layoutElement;
-    }
-
-    private static function indent(int $indent): string
-    {
-        return str_repeat(str_repeat(" ", Config::$indentSize), $indent);
     }
 
     private function checkCustomTags(HtmlElement $element): HtmlElement

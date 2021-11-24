@@ -1,5 +1,6 @@
 extends $test
 
 block body
-    a # _test
-        img test/img.png
+    .container > .row#test > .col
+        h1 Bonjour le monde
+            small (et tous ceux que j'oublie)
