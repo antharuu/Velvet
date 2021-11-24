@@ -14,6 +14,7 @@ class HtmlElement
     public string $content = "";
     public int $indent = 0;
     public array $attributes = [];
+    public array $filters = [];
     public array $block = [];
     public array $selfClose = [
         "!DOCTYPE",

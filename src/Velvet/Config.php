@@ -3,6 +3,8 @@
 namespace Antharuu\Velvet;
 
 use Antharuu\Velvet\CustomTags\{DoctypeTag, HeaderLinkTag, ImageTag, LinkTag, MetaTag, ScriptTag};
+use Antharuu\Velvet\Filters\LowerFilter;
+use Antharuu\Velvet\Filters\UpperFilter;
 
 class Config
 {
@@ -15,6 +17,8 @@ class Config
 
     public static string $extFile = "vlvt";
 
+    public static int $infiniteLoopSecurity = 150;
+
     public static array $customTags = [
         DoctypeTag::class,
         MetaTag::class,
@@ -23,5 +27,9 @@ class Config
         LinkTag::class,
         ImageTag::class,
     ];
-    public static int $infiniteLoopSecurity = 150;
+
+    public static array $filters = [
+        UpperFilter::class,
+        LowerFilter::class,
+    ];
 }

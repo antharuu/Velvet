@@ -54,10 +54,13 @@ class Velvet extends Velvet\Config
         return $this->Parser->transform($string);
     }
 
-    public function customTagsRegister(array $tagsClass)
+    public function customTagsRegister(array $tagsClasses)
     {
-        foreach ($tagsClass as $tag) Config::$customTags[] = $tag;
+        foreach ($tagsClasses as $tag) Config::$customTags[] = $tag;
     }
 
-
+    public function filterRegister(array $filtersClasses)
+    {
+        foreach ($filtersClasses as $filter) Config::$filters[] = $filter;
+    }
 }

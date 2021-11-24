@@ -2,5 +2,5 @@ extends $test
 
 block body
     .container > .row > .col
-        h1 Bonjour le monde
-            small (et tous ceux que j'oublie)
+        h1.oui#non Bonjour le monde
+            small  (et tous ceux que j'oublie)

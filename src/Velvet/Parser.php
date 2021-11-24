@@ -17,6 +17,8 @@ class Parser
         "#^(?'ids'\#[a-zA-Z0-9\-\_]+)?(?'content'.*)$#";
     private string $regexClasses =
         "#^(?'classes'\.[a-zA-Z0-9\-\_]+)?(?'content'.*)$#";
+    private string $regexFilters =
+        "#^(?'filters'\![a-zA-Z0-9\-\_]+)?(?'content'.*)$#";
     private string $regexAttributes =
         "#^(?'attributes'\((?'attr' *([a-zA-Z0-9\-]+(\=(\\\".*\\\"|\'.*\')|\=\\$\S+)? *)*)\))?(?'content'.*)$#";
     private string $regexSubAttributes =
@@ -89,6 +91,8 @@ class Parser
             else $blockElement = $this->checkCustomTags($blockElement);
             $blockIndent = $indent;
 
+            $blockElement = $this->applyFilters($blockElement);
+
             $this->htmlLines[] = $blockElement->getHtml();
         endwhile;
     }
@@ -121,17 +125,22 @@ class Parser
 
         $securityIteration = 0;
         while (!str_starts_with($content, " ") && strlen(trim($content)) > 0) {
-            preg_match_all($this->regexIds, $content, $matchesIds, PREG_SET_ORDER);
-            preg_match_all($this->regexClasses, $content, $matchesClasses, PREG_SET_ORDER);
+            preg_match_all($this->regexFilters, $content, $matchesFilters, PREG_SET_ORDER);
             preg_match_all($this->regexAttributes, $content, $matchesAttributes, PREG_SET_ORDER);
 
-            if (isset($matchesIds[0]['ids']) && strlen(trim($matchesIds[0]['ids'])) > 0) {
-                $element->setAttribute("id", explode("#", $matchesIds[0]['ids']));
-                $content = $matchesIds[0]['content'];
-            } elseif (isset($matchesClasses[0]['classes']) && strlen(trim($matchesClasses[0]['classes'])) > 0) {
-                $element->setAttribute("class", explode(".", $matchesClasses[0]['classes']));
-                $content = $matchesClasses[0]['content'];
-            } elseif (isset($matchesAttributes[0]['attributes']) && strlen(trim($matchesAttributes[0]['attributes'])) > 0) {
+            if ($this->regexHasAttr($this->regexIds, "ids", $content)) {
+                $matches = $this->regexGetAttr($this->regexIds, "ids", $content);
+                $element->setAttribute("id", explode("#", $matches['ids']));
+                $content = $matches['content'];
+            } elseif ($this->regexHasAttr($this->regexClasses, "classes", $content)) {
+                $matches = $this->regexGetAttr($this->regexClasses, "classes", $content);
+                $element->setAttribute("class", explode(".", $matches['classes']));
+                $content = $matches['content'];
+            } elseif ($this->regexHasAttr($this->regexFilters, "filters", $content)) {
+                $matches = $this->regexGetAttr($this->regexFilters, "filters", $content);
+                $element->filters[] = substr($matches['filters'], 1);
+                $content = $matches['content'];
+            } elseif ($this->regexHasAttr($this->regexAttributes, "attributes", $content)) {
                 preg_match_all(str_replace("\n", "", $this->regexSubAttributes), $matchesAttributes[0]['attributes'], $matchesSubAttributes, PREG_SET_ORDER, 0);
                 foreach ($matchesSubAttributes as $a) $element->setAttribute($a['attribute'], $a['value'] ?? null);
                 $content = $matchesAttributes[0]['content'];
@@ -142,6 +151,18 @@ class Parser
         }
 
         return substr($content, 1);
+    }
+
+    private function regexHasAttr(string $regex, string $string, string $content): bool
+    {
+        preg_match_all($regex, $content, $matches, PREG_SET_ORDER);
+        return isset($matches[0][$string]) && strlen(trim($matches[0][$string])) > 0;
+    }
+
+    private function regexGetAttr(string $regex, string $string, mixed $content): array
+    {
+        preg_match_all($regex, $content, $matches, PREG_SET_ORDER);
+        return $matches[0];
     }
 
     private function getCode(string $content, HtmlElement $element): string
@@ -216,6 +237,19 @@ class Parser
             }
         }
 
+        return $element;
+    }
+
+    private function applyFilters(HtmlElement $element): HtmlElement
+    {
+        foreach ($element->filters as $filter) {
+            foreach (Config::$filters as $class) {
+                $C = new $class($element);
+                if (strtolower($filter) === strtolower($C->filterName)) {
+                    $C->filter();
+                }
+            }
+        }
         return $element;
     }
 }
