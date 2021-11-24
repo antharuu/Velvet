@@ -4,6 +4,7 @@ namespace Antharuu;
 
 use Antharuu\Velvet\Config;
 use Antharuu\Velvet\Parser;
+use Antharuu\Velvet\Tools;
 use Antharuu\Velvet\Variables;
 
 class Velvet extends Velvet\Config
@@ -16,8 +17,9 @@ class Velvet extends Velvet\Config
         $this->Parser = new Parser($this);
     }
 
-    public function parseFile(string $fileName, string $filePath = null): string|null
+    public function parseFile(string $fileName, array $variables = []): string|null
     {
+        if ($variables !== []) Variables::setGlobals($variables);
         $content = self::getFile($fileName);
 
         return $content !== null ? $this->parse($content) : null;
@@ -28,13 +30,15 @@ class Velvet extends Velvet\Config
         $currentPath = $filePath ?? self::$viewPath;
         $currentFile = $currentPath . DIRECTORY_SEPARATOR . self::addExt($fileName);
 
+        foreach (Variables::getGlobals() as $var => $____value) $$var = $____value;
+        $currentFile = Tools::echo($currentFile);
+
         if (file_exists($currentFile)) {
             return file_get_contents($currentFile);
-        } else {
-            echo "Sorry we can't find any \"<code>" . self::addExt($fileName) . "</code>\" files 
-in the \"<code>" . $currentPath . "</code>\" folder.";
         }
 
+
+        echo "Sorry we can't find any \"<code>" . self::addExt($fileName) . "</code>\" files in the \"<code>" . $currentPath . "</code>\" folder.";
         return null;
     }
 

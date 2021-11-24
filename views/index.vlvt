@@ -1,5 +1,5 @@
-extends layout
+extends $test
 
 block body
     a # _test
-        img test/img.png ffghgfd gdh fdh gf
+        img test/img.png

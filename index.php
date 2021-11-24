@@ -12,7 +12,7 @@ $V->customTagsRegister([
     Velvet\CustomTags\ImageTag::class
 ]);
 
-$html = $V->parseFile($current_page);
+$html = $V->parseFile($current_page, ["test" => "layout"]);
 echo $html;
 
 dump($html);
