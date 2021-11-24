@@ -1,6 +1,6 @@
 extends $test
 
 block body
-    .container > .row#test > .col
+    .container > .row > .col
         h1 Bonjour le monde
             small (et tous ceux que j'oublie)

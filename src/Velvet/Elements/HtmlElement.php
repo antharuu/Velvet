@@ -119,16 +119,19 @@ class HtmlElement
 
         if (!is_array($values)) {
             $values = !empty($values) ? $values : $defaultValue;
-            if (strlen(trim($values)) > 0) $values = [$values];
+            $values = (strlen(trim($values)) > 0) ? [$values] : [];
         }
 
+
         if (is_array($values)) {
-            foreach ($values as $value) {
-                if (strlen(trim($value)) > 0 && is_string($value)) {
-                    $value = $this->removeBraces($value);
-                    $this->attributes[$attributeName][$value] = Tools::echo($value);
+            if (count($values) > 0) {
+                foreach ($values as $value) {
+                    if (strlen(trim($value)) > 0 && is_string($value)) {
+                        $value = $this->removeBraces($value);
+                        $this->attributes[$attributeName][$value] = Tools::echo($value);
+                    }
                 }
-            }
+            } else $this->attributes[$attributeName] = null;
         }
     }
 
