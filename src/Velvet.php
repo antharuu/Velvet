@@ -39,7 +39,7 @@ class Velvet extends Velvet\Config
 
 
         echo "Sorry we can't find any \"<code>" . self::addExt($fileName) . "</code>\" files in the \"<code>" . $currentPath . "</code>\" folder.";
-        return null;
+        die();
     }
 
     public static function addExt(string $fileName): string

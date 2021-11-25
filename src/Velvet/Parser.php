@@ -125,8 +125,9 @@ class Parser
 
         $securityIteration = 0;
         while (!str_starts_with($content, " ") && strlen(trim($content)) > 0) {
-            preg_match_all($this->regexFilters, $content, $matchesFilters, PREG_SET_ORDER);
             preg_match_all($this->regexAttributes, $content, $matchesAttributes, PREG_SET_ORDER);
+
+            if (str_starts_with($content, "$")) $content = Tools::echo($content);
 
             if ($this->regexHasAttr($this->regexIds, "ids", $content)) {
                 $matches = $this->regexGetAttr($this->regexIds, "ids", $content);
