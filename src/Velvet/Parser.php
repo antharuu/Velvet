@@ -144,6 +144,7 @@ class Parser
             } elseif ($this->regexHasAttr($this->regexAttributes, "attributes", $content)) {
                 preg_match_all(str_replace("\n", "", $this->regexSubAttributes), $matchesAttributes[0]['attributes'], $matchesSubAttributes, PREG_SET_ORDER, 0);
                 foreach ($matchesSubAttributes as $a) $element->setAttribute($a['attribute'], $a['value'] ?? null);
+
                 $content = $matchesAttributes[0]['content'];
             }
 

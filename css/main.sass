@@ -37,3 +37,83 @@ body
     code
       display: block
       width: 100%
+
+#right, #left
+  &-side
+    height: 100vh
+    overflow-y: auto
+    overflow-x: hidden
+    margin: 0
+
+#right-side
+  background-color: $primary
+  padding: 1rem
+
+  ul
+    display: flex
+    flex-direction: column
+    align-items: center
+    list-style-type: none
+    padding: 0
+    margin: 0
+
+    li
+      padding: 0
+      width: 100%
+      text-align: center
+      position: relative
+      outline: 2px solid $dark
+      border: 2px solid $primary
+
+      &:not(:first-child)
+        margin-top: calc(1rem + 4px)
+
+      a
+        display: block
+        padding: 1rem
+        text-decoration: none
+        color: $dark
+        text-transform: uppercase
+        position: relative
+        overflow: hidden
+
+        &::before
+          content: ""
+          pointer-events: none
+          position: absolute
+          background-color: $dark
+          height: 500px
+          width: 6px
+          top: 50%
+          left: 50%
+          transform: translate(-50%, -50%) rotate(30deg) scale(0)
+          transition: all .5s ease-in-out
+          @media screen and (max-width: 960px)
+            width: 1.5vw
+
+        &::after
+          content: attr(data-content)
+          pointer-events: none
+          position: absolute
+          color: $primary
+          top: 0
+          bottom: 0
+          right: 0
+          left: 0
+          padding: 1rem
+          font-weight: bold
+          transition: all .3s ease-in-out
+          transform: translateY(100%) rotate(-10deg) scale(0)
+          opacity: 0
+          display: flex
+          justify-content: center
+          align-items: center
+
+
+      a:hover, &.active a
+        &::before
+          transform: translate(-50%, -50%) rotate(0deg) scale(80)
+
+        &::after
+          opacity: 1
+          transform: translateY(0) rotate(0deg) scale(1.2)

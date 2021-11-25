@@ -29,7 +29,7 @@ class HtmlElement
         $html = "";
 
         if ($this->tag !== "|" && !$noTag) {
-            $html .= "<{$this->tag}{$this->getAttributes()}";
+            $html .= "<$this->tag{$this->getAttributes()}";
             $html .= in_array($this->tag, Config::$selfClose) ? "/>" : ">";
         }
 
@@ -40,10 +40,10 @@ class HtmlElement
                 $html .= $P->transform(implode("\n", $this->block), $this->indent + 1);
             }
 
-            if ($this->tag !== "|" && !$noTag) $html .= "</{$this->tag}>";
+            if ($this->tag !== "|" && !$noTag) $html .= "</$this->tag>";
         }
 
-        return $html;
+        return Tools::echo(addslashes($html));
     }
 
     private function paternInit(): string

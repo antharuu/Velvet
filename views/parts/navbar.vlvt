@@ -1,0 +1,4 @@
+#navigation > ul
+    for $links as $href => $name
+        ? $active = ($href === $current_page) ? ".active" : ""
+        li$active > a(data-content='$name') $href $name

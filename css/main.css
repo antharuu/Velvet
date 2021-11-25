@@ -37,4 +37,86 @@ body {
   width: 100%;
 }
 
+#right-side, #left-side {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
+}
+
+#right-side {
+  background-color: #bb1c1c;
+  padding: 1rem;
+}
+#right-side ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+#right-side ul li {
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  outline: 2px solid #212121;
+  border: 2px solid #bb1c1c;
+}
+#right-side ul li:not(:first-child) {
+  margin-top: calc(1rem + 4px);
+}
+#right-side ul li a {
+  display: block;
+  padding: 1rem;
+  text-decoration: none;
+  color: #212121;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+#right-side ul li a::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  background-color: #212121;
+  height: 500px;
+  width: 6px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(30deg) scale(0);
+  transition: all 0.5s ease-in-out;
+}
+@media screen and (max-width: 960px) {
+  #right-side ul li a::before {
+    width: 1.5vw;
+  }
+}
+#right-side ul li a::after {
+  content: attr(data-content);
+  pointer-events: none;
+  position: absolute;
+  color: #bb1c1c;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  transform: translateY(100%) rotate(-10deg) scale(0);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#right-side ul li a:hover::before, #right-side ul li.active a::before {
+  transform: translate(-50%, -50%) rotate(0deg) scale(80);
+}
+#right-side ul li a:hover::after, #right-side ul li.active a::after {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg) scale(1.2);
+}
+
 /*# sourceMappingURL=main.css.map */

@@ -1,10 +1,4 @@
-? $a = rand(0,2);
+extends layout
 
-body
-    h1= $a
-    if $a === 0
-        h1 A = 0
-    elseif $a === 1
-        h1 A = 1
-    else
-        h1 A = 2
+block body
+    .container > .row > .col > h1 Hello world
