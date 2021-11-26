@@ -14,8 +14,9 @@ html(lang="en")
         title Velvet
     body
         .container-fluid.vh-100 > .row
-            #left-side.col
+            #left-side.col.py-3.text-light
                 h1#title Velvet
+                include parts/top
                 block body
             #right-side.col-12.col-md-5.col-lg-4.col-xl-3
                 include parts/navbar
