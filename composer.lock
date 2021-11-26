@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6919435766d89d08e483a55096ef8536",
+    "content-hash": "f75e5d687fc8ec3b6a012a1ba2791e52",
     "packages": [
         {
             "name": "antharuu/toolbox",

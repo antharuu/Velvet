@@ -16,5 +16,6 @@ class PrismTag extends CustomTag implements CustomTagInterface
         $newBlock = [];
         foreach ($this->element->block as $blkLine) $newBlock[] = "| " . htmlentities($blkLine);
         $this->element->block = $newBlock;
+        $this->element->keepStrict = true;
     }
 }

@@ -12,6 +12,6 @@
 ## Ideas, maybe later
 
 - [ ] A js version
-- [ ] A bin compiler
+- [ ] A transpiler
 - [ ] Make integrations for php frameworks
 - [ ] Make syntax coloring plugins for the main code editors.

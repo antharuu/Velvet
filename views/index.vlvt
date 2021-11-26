@@ -1,63 +1,26 @@
 extends layout
 
 block body
-    .container > .row > .col
-        !markdown
-            **Velvet is a template engine for PHP, it is easy to use, light, fast and customizable.**
-
-            *It is strongly inspired by one of my previous projects, Mew, itself inspired by Pug.*
-
-            ### Why create a template engine?
-
-            Because it makes life easier, writing HTML is laborious, and even more so to integrate PHP. It avoids a lot of code
-            repetition and makes everything very readable.
-
-            ### Why not use Pug, Blade or Twig or others?
-
-            Because Blade & Twig use an HTML base, certainly they simplify the PHP integration, but do not change anything to the
-            fact that the whole is laborious and quickly unreadable.
-
-        prism:html
-            <h1>Bonjour le monde</h1>
-            <br />
-            <hr />
-            <br />
-            <h2>
-                Oui mdr
-                <span>ok</span>
-            <h2>
-
-
-        prism:php
-            ob_start();
-            echo "le daup l'ol hin"; // J'aime l'humour
-            echo ob_get_clean();
-
-        prism
-            ob_start();
-            echo "le dauphin"; // J'aime l'humour
-            echo ob_get_clean();
-
-
-        !markdown
-            As for Pug, it is mainly JS oriented (even if there is a PHP version) and above all is very old in its logic and lacks
-            features.
-
-            And all of them are not customizable enough for my taste, I like that everything is simple to customize, and that
-            everyone can add or remove features (and why not integrate them officially).
-
-            ### Any versions of Velvet planned for other languages?
-
-            Eventually, in JS, this is not a priority at all, the most important thing is to have a stable version of VelvetPHP.
-
-            Let me know if you want other versions or features.
-
-            ### Is it an open-source project?
-
-            Of course, everyone is free to participate. I am looking for collaborators with the same vision of the project as me.
-
-            ### Where can I download it and see the documentation ?
-
-            You will find, here, some examples and what to download.
-
-            A website will be released for 1.0 with complete documentation, examples, and a place to test Velvet online.
+    !markdown
+        ## Installation
+        Velvet is installable via [composer](https://getcomposer.org):
+    prism:pug
+        composer require antharuu/velvet
+    !markdown
+        ## Overview
+        Velvet works very simply, it will parse your code or `.vlvt` file and simply translate it into HTML. Unlike other template engines, Velvet is designed for ease of use and modularity. So it will be very easy for you to add features to automate and simplify your work.
+        You can use PHP code as much as you want inside, although Velvel already offers some useful functions.
+    alert:warning Velvet is still a very young template engine and developed by me alone, it is not impossible to encounter bugs on advanced uses. It would be very appreciated to send them to me.
+    !markdown
+        Let's see a simple use, we have an `index.vlvt` file in a folder `views`:
+    prism:pug
+        h1 Hello, my name is $name
+    !markdown
+        And here we have a simple `test.php` file:
+    prism:php
+        use Antharuu\Velvet;
+        $V = new Velvet(['name' => 'Paul']); // You can give it variables very easily at initialization
+        echo $V->parseFile("index", "views") // views is not necessary because it is the default value.
+    !markdown
+        The result:
+    pre.language-html > code= {{htmlentities("<h1>Hello, my name is Paul</h1>")}}

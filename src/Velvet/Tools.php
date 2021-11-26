@@ -19,6 +19,8 @@ class Tools
                 str_starts_with($p, "{{") &&
                 str_ends_with($p, "}}")) {
                 $p = substr($p, 2, -2);
+                $p = str_replace("\"\"", "\"", $p);
+                $p = str_replace("''", "'", $p);
                 $p = eval("return $p;");
             } else {
                 $p = eval("return \"$p\";");

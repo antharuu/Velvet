@@ -2,7 +2,17 @@
   "name": "antharuu/velvet",
   "description": "Modern and simple template engine",
   "type": "library",
+  "homepage": "http://velvet.antharuu.fr",
+  "keywords": [
+    "velvet",
+    "pug",
+    "twig",
+    "blade",
+    "template",
+    "html"
+  ],
   "license": "MIT",
+  "version": "1.0.0",
   "autoload": {
     "psr-4": {
       "Antharuu\\": "src/"
@@ -11,7 +21,9 @@
   "authors": [
     {
       "name": "antharuu",
-      "email": "antho.eclips@gmail.com"
+      "email": "antho.eclips@gmail.com",
+      "homepage": "http://antharuu.fr",
+      "role": "Developer"
     }
   ],
   "minimum-stability": "stable",

@@ -4,7 +4,6 @@ body {
 }
 
 #title {
-  color: #bb1c1c;
   font-family: "Oleo Script Swash Caps", cursive;
   font-size: 6rem;
   text-align: center;
@@ -17,6 +16,10 @@ body {
   right: 1rem;
   opacity: 0.6;
   text-shadow: none;
+}
+#title a {
+  color: #bb1c1c !important;
+  text-decoration: none;
 }
 
 #codes {
@@ -121,6 +124,31 @@ body {
 
 #left-side {
   position: relative;
+}
+#left-side a {
+  color: #bb1c1c !important;
+  text-decoration: none;
+}
+#left-side a:hover {
+  font-style: italic;
+}
+#left-side #markdown-content {
+  padding-bottom: 5rem;
+}
+#left-side #markdown-content h2 {
+  color: #bb1c1c;
+  display: block;
+  font-size: 2.5rem;
+  position: relative;
+}
+#left-side #markdown-content div:not(:first-child) > h2 {
+  margin-top: 3rem;
+}
+#left-side .alert {
+  border: none;
+  border-radius: 0;
+  background-color: #bb6c1c;
+  color: #212121;
 }
 
 #top {
