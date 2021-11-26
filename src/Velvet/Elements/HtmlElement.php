@@ -13,17 +13,18 @@ class HtmlElement
     public string $tag = "div";
     public string $subtag = "";
     public string $content = "";
-    public int $indent = 0;
+
     public array $attributes = [];
     public array $filters = [];
     public array $block = [];
 
+    public int $indent = 0;
+
     public function getHtml($force = false, $noTag = false): string
     {
-        if (!$force) {
-            if (get_class($this) === "Antharuu\Velvet\Elements\HtmlElement") {
-                if (isset(Config::$elementsPaterns[$this->tag]) || in_array($this->tag, Config::$elementsPaterns)) return $this->paternInit();
-            }
+        if (!$force && get_class($this) === "Antharuu\Velvet\Elements\HtmlElement") {
+            if (isset(Config::$elementsPaterns[$this->tag]) ||
+                in_array($this->tag, Config::$elementsPaterns)) return $this->paternInit();
         }
 
         $html = "";
@@ -43,19 +44,27 @@ class HtmlElement
             if ($this->tag !== "|" && !$noTag) $html .= "</$this->tag>";
         }
 
-        return Tools::echo(addslashes($html));
+        return str_replace("\\", "", Tools::echo(addslashes($html)));
     }
 
     private function paternInit(): string
     {
         $class = $this->tag;
+
         foreach (Config::$elementsPaterns as $v => $p) {
             if (!is_int($p) && $v === $this->tag) $class = $p;
         }
 
-        $code = $this
-            ->castAs("Antharuu\Velvet\Elements\\" . ucfirst($class) . "Element")
-            ->getPatern();
+        if (!class_exists($class)) {
+            $class = "Antharuu\Velvet\Elements\\" . ucfirst($class) . "Element";
+        }
+
+        if (class_exists($class)) {
+            $code = $this
+                ->castAs($class)
+                ->getPatern();
+        }
+
         return (is_string($code)) ? $code : "";
     }
 
@@ -74,7 +83,7 @@ class HtmlElement
         foreach ($this->attributes as $attr => $values) {
             $attributes .= " $attr";
             if (!is_null($values) && count($values) > 0) {
-                $attributes .= "=\"";
+                $attributes .= " = \"";
                 $vals = implode(' ', $values);
                 $attributes .= trim($vals) . "\"";
             }
@@ -83,7 +92,8 @@ class HtmlElement
         return $attributes;
     }
 
-    public function setAttribute(string $attributeName, string|array $values = "", string $defaultValue = ""): void
+    public
+    function setAttribute(string $attributeName, string|array $values = "", string $defaultValue = ""): void
     {
         foreach (Variables::getGlobals() as $var => $____value) $$var = $____value;
 
@@ -107,7 +117,8 @@ class HtmlElement
         }
     }
 
-    private function removeBraces(string $value): string
+    private
+    function removeBraces(string $value): string
     {
         if ((str_starts_with($value, '"') && str_ends_with($value, '"')) ||
             (str_starts_with($value, "'") && str_ends_with($value, "'"))) {

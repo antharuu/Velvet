@@ -19,5 +19,8 @@
     "php": "^8.0",
     "gajus/dindent": "^2.0",
     "antharuu/toolbox": "dev-master"
+  },
+  "require-dev": {
+    "michelf/php-markdown": "^1.9"
   }
 }

@@ -3,6 +3,9 @@
 use Antharuu\Velvet;
 
 require_once "vendor/autoload.php";
+require_once "dist/MarkdownFilter.php";
+require_once "dist/PrismElement.php";
+require_once "dist/PrismTag.php";
 
 $current_page = $_GET['page'] ?? "index";
 
@@ -21,6 +24,11 @@ $V = new Velvet([
         "includes" => "Includes",
     ]
 ]);
+
+Velvet\Config::$beautify = false;
+$V->customTagsRegister([PrismTag::class]);
+$V->elementRegister(["prism" => PrismElement::class]);
+$V->filterRegister([MarkdownFilter::class]);
 
 $html = $V->parseFile($current_page);
 echo $html;

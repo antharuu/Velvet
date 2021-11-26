@@ -4,7 +4,7 @@ namespace Antharuu\Velvet\Elements;
 
 use Antharuu\Velvet\Variables;
 
-class CodeElement extends HtmlElement implements ElementInterface
+class CodePHPElement extends HtmlElement implements ElementInterface
 {
     public function getPatern(): string|bool
     {

@@ -119,4 +119,18 @@ body {
   transform: translateY(0) rotate(0deg) scale(1.2);
 }
 
+#left-side {
+  position: relative;
+}
+
+#top {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+}
+#top a svg {
+  height: 3rem;
+}
+
 /*# sourceMappingURL=main.css.map */

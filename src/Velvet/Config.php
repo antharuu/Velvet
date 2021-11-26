@@ -57,7 +57,7 @@ class Config
         "extends",
         "block",
         "include",
-        "?" => "code",
+        "?" => "codePHP",
         "=" => "echo",
         "for",
         "if" => "condition",

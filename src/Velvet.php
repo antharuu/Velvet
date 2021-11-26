@@ -63,4 +63,9 @@ class Velvet extends Velvet\Config
     {
         foreach ($filtersClasses as $filter) Config::$filters[] = $filter;
     }
+
+    public function elementRegister(array $elementsClasses)
+    {
+        foreach ($elementsClasses as $k => $element) Config::$elementsPaterns[$k] = $element;
+    }
 }
