@@ -18,6 +18,8 @@ class HtmlElement
     public array $filters = [];
     public array $block = [];
 
+    public bool $keepStrict = false;
+
     public int $indent = 0;
 
     public function getHtml($force = false, $noTag = false): string
@@ -44,7 +46,7 @@ class HtmlElement
             if ($this->tag !== "|" && !$noTag) $html .= "</$this->tag>";
         }
 
-        return str_replace("\\", "", Tools::echo(addslashes($html)));
+        return $html;
     }
 
     private function paternInit(): string
