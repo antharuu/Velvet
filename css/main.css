@@ -1,4 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap");
+* {
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+  width: 16px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  border-top: 4px solid;
+  border-bottom: 4px solid;
+  border-left: 0 solid;
+  border-right: 4px solid;
+}
+
 body {
   background-color: #212121;
 }
@@ -50,6 +67,11 @@ body {
 #right-side {
   background-color: #bb1c1c;
   padding: 1rem;
+  scrollbar-color: #212121 transparent;
+}
+#right-side::-webkit-scrollbar-thumb {
+  background-color: #212121;
+  border-color: #bb1c1c;
 }
 #right-side ul {
   display: flex;
@@ -124,12 +146,17 @@ body {
 
 #left-side {
   position: relative;
+  scrollbar-color: #bb1c1c transparent;
 }
-#left-side a {
+#left-side::-webkit-scrollbar-thumb {
+  background-color: #bb1c1c;
+  border-color: #212121;
+}
+#left-side :not(#title) a {
   color: #bb1c1c !important;
   text-decoration: none;
 }
-#left-side a:hover {
+#left-side :not(#title) a:hover {
   font-style: italic;
 }
 #left-side #markdown-content {

@@ -5,6 +5,27 @@ $dark: #212121
 
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap')
 
+*
+  scrollbar-width: thin
+
+
+  &::-webkit-scrollbar
+    width: 16px
+
+
+  &::-webkit-scrollbar-track
+    background: transparent
+
+
+  &::-webkit-scrollbar-thumb
+    border-radius: 0
+    border:
+      top: 4px solid
+      bottom: 4px solid
+      left: 0 solid
+      right: 4px solid
+
+
 body
   background-color: #212121
 
@@ -50,9 +71,15 @@ body
     overflow-x: hidden
     margin: 0
 
+
 #right-side
   background-color: $primary
   padding: 1rem
+  scrollbar-color: $dark transparent
+
+  &::-webkit-scrollbar-thumb
+    background-color: $dark
+    border-color: $primary
 
   ul
     display: flex
@@ -125,13 +152,19 @@ body
 
 #left-side
   position: relative
+  scrollbar-color: $primary transparent
 
-  a
-    color: $primary !important
-    text-decoration: none
+  &::-webkit-scrollbar-thumb
+    background-color: $primary
+    border-color: $dark
 
-    &:hover
-      font-style: italic
+  :not(#title)
+    a
+      color: $primary !important
+      text-decoration: none
+
+      &:hover
+        font-style: italic
 
   #markdown-content
     padding-bottom: 5rem
