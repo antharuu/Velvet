@@ -193,3 +193,21 @@ body
   a
     svg
       height: 3rem
+
+.example-code
+  display: flex
+  width: 100%
+
+  pre[class*=language-]
+    width: 50%
+    margin: .5em .25rem .5em 0
+    scrollbar-color: $primary transparent
+
+    &::-webkit-scrollbar-thumb
+      background-color: $primary
+      border-top: 0
+      border-left: 4px solid
+      border-color: #2d2d2d
+
+    &:not(:first-child)
+      margin: .5em 0 .5em .25rem

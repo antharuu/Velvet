@@ -18,7 +18,7 @@ html(lang="en")
             #left-side.col.py-3.text-light
                 h1#title > a index Velvet
                 include parts/top
-                .container > .row.justify-content-center > #markdown-content.col-12.col-lg-11
+                .container > .row.justify-content-center > #markdown-content.col-12
                     block body
             #right-side.col-12.col-md-5.col-lg-4.col-xl-3
                 include parts/navbar

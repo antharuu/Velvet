@@ -188,4 +188,23 @@ body {
   height: 3rem;
 }
 
+.example-code {
+  display: flex;
+  width: 100%;
+}
+.example-code pre[class*=language-] {
+  width: 50%;
+  margin: 0.5em 0.25rem 0.5em 0;
+  scrollbar-color: #bb1c1c transparent;
+}
+.example-code pre[class*=language-]::-webkit-scrollbar-thumb {
+  background-color: #bb1c1c;
+  border-top: 0;
+  border-left: 4px solid;
+  border-color: #2d2d2d;
+}
+.example-code pre[class*=language-]:not(:first-child) {
+  margin: 0.5em 0 0.5em 0.25rem;
+}
+
 /*# sourceMappingURL=main.css.map */

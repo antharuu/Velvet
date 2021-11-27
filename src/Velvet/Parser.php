@@ -23,7 +23,7 @@ class Parser
     private string $regexAttributes =
         "#^(?'attributes'\((?'attr' *([a-zA-Z0-9\-]+(\=(\\\".*\\\"|\'.*\')|\=\\$\S+)? *)*)\))?(?'content'.*)$#";
     private string $regexSubAttributes =
-        "#((?'attribute'[\w-]+)(=(?'value'\"[\w\d\s\v\@\?\!\-\_\\.:\>\<\(\)\~\&\#\{\}\^\$\'\\\"\/]*\"|\'[\w\d\s\v\@\?\!\.\-\_\:\>\<\(\)\~\&\#\{\}\^\$\\\"\\\/']*\')|=\$\S+)?)+#";
+        "#((?'attribute'[\w-]+)(=(?'value'\"[\w\d\s\v\@\?\!\-\_\\\.\:\;\>\<\(\)\~\&\#\{\*\}\^\$\'\ \,\\\"\/]*\"|\'[\w\d\s\v\@\?\!\-\_\\\.\:\;\>\<\(\)\~\&\#\{\*\}\^\$\'\ \,\\\"\/]*\')|=\$\S+)?)*#";
     private array $lines = [];
     private array $htmlLines = [];
 
@@ -143,7 +143,7 @@ class Parser
                 $content = $matches['content'];
             } elseif ($this->regexHasAttr($this->regexAttributes, "attributes", $content)) {
                 preg_match_all(str_replace("\n", "", $this->regexSubAttributes), $matchesAttributes[0]['attributes'], $matchesSubAttributes, PREG_SET_ORDER, 0);
-                foreach ($matchesSubAttributes as $a) $element->setAttribute($a['attribute'], $a['value'] ?? null);
+                foreach ($matchesSubAttributes as $a) $element->setAttribute($a['attribute'] ?? "", $a['value'] ?? "");
 
                 $content = $matchesAttributes[0]['content'];
             }

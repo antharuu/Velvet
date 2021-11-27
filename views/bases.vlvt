@@ -1,0 +1,54 @@
+extends layout
+
+block body
+    !markdown
+        ## Base
+        The syntax of **Velvet** is very simple, if you know **HTML** and **PHP** you will have absolutely no difficulty.
+        Let's take a very simple example to start:
+    .example-code
+        prism:pug
+            h1 Hello I am a title
+            h2 Me too
+        prism:html
+            <h1>Hello I am a title</h1>
+            <h2>Me too</h2>
+    !markdown
+        ## Nesting
+        It will be very simple as in SASS to do nesting. You only have to take care of the right amount of spaces (or tabs), no need for more.
+    .example-code
+        prism:pug
+            h1 Hello world, my name is
+                span Anthony
+        prism:html
+            <h1>Hello world, my name is <span>Anthony</span></h1>
+    !markdown
+        There is no limit on the number of nests.
+    .example-code
+        prism:pug
+            h1 The header
+                span with a
+                    a # link
+                        span with a span
+                            span in a span
+        prism:html
+            <h1>The header <span>with a <a href="#">link <span>with a span<span>in a span</span></span></a></span></h1>
+    !markdown
+        ### Inline nesting
+        It is possible to nest inline. I created this, because often we find ourselves in situations a bit stupid.
+        Example without inline nesting:
+    prism:pug
+        h1
+            span
+                span
+                    span
+                        ul
+                            li
+                                a
+                                    span Hello
+    !markdown
+        And with inline nesting:
+    prism:pug
+        h1 > span > span > span > ul > li > a > span Hello
+    !markdown
+        In both cases the result will be the same, but if you don't have any content in your nesting, think of putting them inline for more readability.
+    alert:warning Your nests must be empty, but you can put in any attributes you want.

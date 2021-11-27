@@ -1,0 +1,45 @@
+extends layout
+
+block body
+    !markdown
+        ## Ids
+        As in CSS you just have to add `#` to add the id attribute, example:
+    .example-code
+        prism:pug
+            h1#title My super title
+            #my-super-div Or any super div element
+        prism:html
+            <h1 id="title">My super title</h1>
+            <div id="my-super-div">Or any super div element</h2>
+    !markdown
+        ## Classes
+        Same thing, you only have to add `.` to add the class attribute, example:
+    .example-code
+        prism:pug
+            h1.text-header My super title
+            .bg-red.text-dark Or any super div element
+        prism:html
+            <h1 class="text-header">My super title</h1>
+            <div class="bg-red text-dark">Or any super div element</h2>
+    !markdown
+        ## Other attributes
+        For this part, we kept things simple, just put your attributes normally in parentheses.
+    .example-code
+        prism:pug
+            h1(title="Amazing title") My super title
+            (style="display: none;") Or any super div element
+        prism:html
+            <h1 title="Amazing title">My super title</h1>
+            <div style="display: none;">Or any super div element</h2>
+    !markdown
+        ## More
+        You can use variables and code inside attributes. And the order of the attributes doesn't matter and will be reordered alphabetically _(however the order of your values remains unchanged)_.
+    .example-code
+        prism:pug
+            h1(class="display-{{ random_int(1,6) }}") My super title
+            #my-id$test.small Or any super div element ($test is equal to ".test-value")
+            button(disabled).btn Idiot button
+        prism:html
+            <h1 class="display-5">My super title</h1>
+            <div class="test-value small" id="my-id">Or any super div element ($test is equal to ".test-value")</h2>
+            <button class="btn" disabled>Idiot button</button>
