@@ -1,0 +1,23 @@
+extends layout
+
+block body
+    !markdown
+        ## Conditions
+        The conditions are the same as in PHP:
+    prism:pug
+        if $rand === 1
+            h1 Hello world
+    prism:pug
+        if $rand === 1
+            h1 Hello world
+        else
+            h1 Goodbye to the world
+    prism:pug
+        if $rand === 1
+            h1 Hello world
+        elseif $rand === 2 && $a === true
+            h1 But where am I?
+        elseif $rand === 2
+            h1 But who am I?
+        else
+            h1 Goodbye to the world

@@ -25,6 +25,20 @@ block body
             h1= Today's date is: {{ date("Y M d") }}
         prism:html
             <h1>Today's date is: <?= date("Y M d") ?></h1>
+    !markdown
+        The echo can also be used as a block:
+    .example-code
+        prism:pug
+            h1 > =
+                Today's date is: {{ date("Y M d") }}
+                But you know this!
+                Remember my name is {{ random_int(0,100) > 80 ? "Paul" : "Pierre" }}
+        prism:html
+            <h1>
+                Today's date is: <?= date("Y M d") ?>
+                But you know this!
+                Remember my name is <?= random_int(0,100) > 80 ? "Paul" : "Pierre" ?>
+            </h1>
 
     !markdown
         ## Variables

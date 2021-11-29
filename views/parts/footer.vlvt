@@ -1,2 +1,6 @@
 footer#footer
-    p All right reserved &copy; Antharuu 2021
+    .d-flex.justify-content-center
+        span.me-2 All right reserved &copy;
+        span.me-2!markdown
+            [Antharuu](https://github.com/antharuu)
+        span= {{ date("Y") }}
