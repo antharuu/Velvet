@@ -17,7 +17,11 @@
 }
 
 body {
-  background-color: #212121;
+  background-color: #171717;
+}
+
+p > code {
+  color: #e967be !important;
 }
 
 #title {
@@ -25,7 +29,7 @@ body {
   font-size: 6rem;
   text-align: center;
   position: relative;
-  text-shadow: 4px 3px 0 rgba(143, 21, 21, 0.5), 6px 6px 6px rgba(54, 8, 8, 0.5);
+  text-shadow: 4px 3px 0 rgba(160, 23, 23, 0.5), 6px 6px 6px rgba(71, 10, 10, 0.5);
 }
 #title > span {
   font-size: 1.5rem;
@@ -35,7 +39,7 @@ body {
   text-shadow: none;
 }
 #title a {
-  color: #bb1c1c !important;
+  color: #CD1D1D !important;
   text-decoration: none;
 }
 
@@ -65,13 +69,13 @@ body {
 }
 
 #right-side {
-  background-color: #bb1c1c;
+  background-color: #CD1D1D;
   padding: 1rem;
-  scrollbar-color: #212121 transparent;
+  scrollbar-color: #171717 transparent;
 }
 #right-side::-webkit-scrollbar-thumb {
-  background-color: #212121;
-  border-color: #bb1c1c;
+  background-color: #171717;
+  border-color: #CD1D1D;
 }
 #right-side ul {
   display: flex;
@@ -86,8 +90,8 @@ body {
   width: 100%;
   text-align: center;
   position: relative;
-  outline: 2px solid #212121;
-  border: 2px solid #bb1c1c;
+  outline: 2px solid #171717;
+  border: 2px solid #CD1D1D;
 }
 #right-side ul li:not(:first-child) {
   margin-top: calc(1rem + 4px);
@@ -96,7 +100,7 @@ body {
   display: block;
   padding: 1rem;
   text-decoration: none;
-  color: #212121;
+  color: #171717;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
@@ -105,7 +109,7 @@ body {
   content: "";
   pointer-events: none;
   position: absolute;
-  background-color: #212121;
+  background-color: #171717;
   height: 500px;
   width: 6px;
   top: 50%;
@@ -122,7 +126,7 @@ body {
   content: attr(data-content);
   pointer-events: none;
   position: absolute;
-  color: #bb1c1c;
+  color: #CD1D1D;
   top: 0;
   bottom: 0;
   right: 0;
@@ -146,24 +150,40 @@ body {
 
 #left-side {
   position: relative;
-  scrollbar-color: #bb1c1c transparent;
+  scrollbar-color: #CD1D1D transparent;
 }
 #left-side::-webkit-scrollbar-thumb {
-  background-color: #bb1c1c;
-  border-color: #212121;
+  background-color: #CD1D1D;
+  border-color: #171717;
 }
-#left-side :not(#title) a {
-  color: #bb1c1c !important;
+#left-side p:not(#title) a {
+  color: #CD1D1D !important;
   text-decoration: none;
+  font-weight: bold;
+  position: relative;
 }
-#left-side :not(#title) a:hover {
-  font-style: italic;
+#left-side p:not(#title) a::before {
+  position: absolute;
+  content: attr(data-value);
+  left: -0.2em;
+  right: -0.2em;
+  top: 100%;
+  bottom: -0.15em;
+  background-color: #CD1D1D;
+  color: #171717;
+  transition: top 250ms ease-in-out;
+  pointer-events: none;
+  text-align: center;
+  overflow: hidden;
+}
+#left-side p:not(#title) a:hover::before {
+  top: -0.15em;
 }
 #left-side #markdown-content {
   padding-bottom: 5rem;
 }
 #left-side #markdown-content h2 {
-  color: #bb1c1c;
+  color: #CD1D1D;
   display: block;
   font-size: 2.5rem;
   position: relative;
@@ -174,8 +194,8 @@ body {
 #left-side .alert {
   border: none;
   border-radius: 0;
-  background-color: #bb6c1c;
-  color: #212121;
+  background-color: #cd751d;
+  color: #171717;
 }
 
 #top {
@@ -195,10 +215,10 @@ body {
 .example-code pre[class*=language-] {
   width: 50%;
   margin: 0.5em 0.25rem 0.5em 0;
-  scrollbar-color: #bb1c1c transparent;
+  scrollbar-color: #CD1D1D transparent;
 }
 .example-code pre[class*=language-]::-webkit-scrollbar-thumb {
-  background-color: #bb1c1c;
+  background-color: #CD1D1D;
   border-top: 0;
   border-left: 4px solid;
   border-color: #2d2d2d;

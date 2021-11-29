@@ -17,10 +17,9 @@ $V = new Velvet([
 //        "test" => "Try Velvet online !",
         "bases" => "Base syntax",
         "attributes" => "Attributes",
-//        "variables" => "Variables",
+        "code" => "PHP Code",
 //        "conditions" => "Conditions",
 //        "loops" => "Loops",
-//        "code" => "PHP Code",
 //        "layouts" => "Layouts",
 //        "includes" => "Includes",
     ]

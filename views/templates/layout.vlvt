@@ -11,6 +11,7 @@ html(lang="en")
 
         script:js defer https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js
         script:js defer js/prism.js
+        script:js defer js/links.js
 
         title Velvet
     body
@@ -20,5 +21,6 @@ html(lang="en")
                 include parts/top
                 .container > .row.justify-content-center > #markdown-content.col-12
                     block body
+                include parts/footer
             #right-side.col-12.col-md-5.col-lg-4.col-xl-3
                 include parts/navbar

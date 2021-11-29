@@ -1,7 +1,8 @@
-$primary: #bb1c1c
+$primary: #CD1D1D
 $info: adjust-hue($primary, 200)
 $warning: adjust-hue($primary, 30)
-$dark: #212121
+$code: lighten(adjust-hue($primary, 320), 20)
+$dark: #171717
 
 @import url('https://fonts.googleapis.com/css2?family=Oleo+Script+Swash+Caps:wght@400;700&display=swap')
 
@@ -27,7 +28,10 @@ $dark: #212121
 
 
 body
-  background-color: #212121
+  background-color: $dark
+
+p > code
+  color: $code !important
 
 #title
   font-family: 'Oleo Script Swash Caps', cursive
@@ -158,13 +162,30 @@ body
     background-color: $primary
     border-color: $dark
 
-  :not(#title)
+  p:not(#title)
     a
       color: $primary !important
       text-decoration: none
+      font-weight: bold
+      position: relative
+
+      &::before
+        position: absolute
+        content: attr(data-value)
+        left: -.2em
+        right: -.2em
+        top: 100%
+        bottom: -.15em
+        background-color: $primary
+        color: $dark
+        transition: top 250ms ease-in-out
+        pointer-events: none
+        text-align: center
+        overflow: hidden
 
       &:hover
-        font-style: italic
+        &::before
+          top: -.15em
 
   #markdown-content
     padding-bottom: 5rem

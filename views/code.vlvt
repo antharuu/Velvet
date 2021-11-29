@@ -1,0 +1,39 @@
+extends layout
+
+block body
+    !markdown
+        ## Code
+        It is very easy to add PHP code regardless of its content. You just have to use the `?` inline or block code.
+    prism:pug
+        ? $header = ".header-" . random_int(1,6)
+        h1$header Hello world
+    prism:php
+        ?
+            // Here all the PHP you want
+            function get_header($min, $max){
+                return ".header-" . random_int($min,$max);
+            }
+            $header = get_header(1,6);
+        h1$header Hello world
+    alert:warning We let you use PHP code, so it is possible that you have visible errors or error feedback, because we choose not to hide them to not slow down your development. <br>So it's up to you to be careful and hide potential errors.
+
+    !markdown
+        ## Echo
+        You don't have to put in a variable to display what you want either. You can use PHP code inside your lines with {{ "`{"."{` & `}"."}`" }}, like this:
+    .example-code
+        prism:pug
+            h1= Today's date is: {{ date("Y M d") }}
+        prism:html
+            <h1>Today's date is: <?= date("Y M d") ?></h1>
+
+    !markdown
+        ## Variables
+        With Velvet you can simply declare variables in a block or a line of php code (with `?`).
+        The variable will then be accessible in any content with an `=` at the end of the attributes.
+    .example-code
+        prism:pug
+            ? $name = "Paul"
+            h1= Hello, my name is $name
+        prism:html
+            <h1>Hello, my name is Paul</h1>
+    alert:warning We turn all your variables into global variables for practical reasons, so be careful.
