@@ -26,9 +26,12 @@ class RegexDecoder
      */
     public static function decode(string $line): array
     {
+        self::$parts = [];
         $line = self::getTag($line);
         while (!str_starts_with($line, " ")) {
-            if (!array_key_exists(substr($line, 0, 1), self::$prefixes)) {
+            if (!array_key_exists(substr($line, 0, 1),
+                array_merge(self::$prefixes, ["$" => ""]))
+            ) {
                 throw new Exception(
                     "Sorry but \"" . substr($line, 0, 1) . "\"" .
                     " is not recognized by Velvet, please add with \"newShortAttribute\" if needed."

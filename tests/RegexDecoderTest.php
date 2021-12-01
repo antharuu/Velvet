@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 class RegexDecoderTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testTags()
     {
         $this->assertEquals([
@@ -14,6 +17,9 @@ class RegexDecoderTest extends TestCase
         ], RegexDecoder::decode("h1 Hello world"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testTagsSpaced()
     {
         $this->assertEquals([
@@ -22,6 +28,9 @@ class RegexDecoderTest extends TestCase
         ], RegexDecoder::decode("h1  Hello world"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testId()
     {
         $this->assertEquals([
@@ -33,6 +42,9 @@ class RegexDecoderTest extends TestCase
         ], RegexDecoder::decode("h1#title Hello world"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testClass()
     {
         $this->assertEquals([
@@ -44,6 +56,9 @@ class RegexDecoderTest extends TestCase
         ], RegexDecoder::decode("h1.text-header Hello world"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testFilter()
     {
         $this->assertEquals([
@@ -55,6 +70,9 @@ class RegexDecoderTest extends TestCase
         ], RegexDecoder::decode("h1!markdown Hello world"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testBasicAttributes()
     {
         $this->assertEquals([
@@ -68,6 +86,9 @@ class RegexDecoderTest extends TestCase
         ], RegexDecoder::decode("h1.text-header#title!markdown.text-center Hello world"));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testAllAttributes()
     {
         $this->assertEquals([
@@ -86,6 +107,9 @@ class RegexDecoderTest extends TestCase
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function testAllAttributesSpaced()
     {
         $this->assertEquals([
@@ -103,6 +127,9 @@ class RegexDecoderTest extends TestCase
         ));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testSimpleAttributeVariable()
     {
         Variable::add("myH1", ["class" => ["text-primary", "bg-dark"], "id" => "title"]);
