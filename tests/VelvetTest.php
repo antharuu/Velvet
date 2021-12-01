@@ -1,6 +1,7 @@
 <?php
 
 use Antharuu\Velvet;
+use Antharuu\Velvet\Variable;
 use PHPUnit\Framework\TestCase;
 
 class VelvetTest extends TestCase
@@ -22,13 +23,24 @@ class VelvetTest extends TestCase
     {
         $V = new Velvet();
         ob_start();
-        echo "
-h1 Hello world
-";
+        echo "h1 Hello world";
         $html = $V->parse(ob_get_clean());
 
         $this->assertEquals(
             "<h1>Hello world</h1>"
+            , $html);
+    }
+
+    public function testSimpleH1WithAttributes()
+    {
+        $V = new Velvet();
+        Variable::add("primary", ["class" => ["text-primary", "bg-dark"]]);
+        $html = $V->parse(
+            'h1.test$primary#title(class=ok a=1 z=999 disabled) Hello world'
+        );
+
+        $this->assertEquals(
+            '<h1 a="1" class="test text-primary bg-dark ok" disabled id="title" z="999">Hello world</h1>'
             , $html);
     }
 }

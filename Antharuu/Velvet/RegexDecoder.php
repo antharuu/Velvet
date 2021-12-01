@@ -2,10 +2,16 @@
 
 namespace Antharuu\Velvet;
 
+use Exception;
+
 class RegexDecoder
 {
+    public static array $prefixes = [
+        "#" => "id",
+        "." => "class",
+        "!" => "filter"
+    ];
     private static array $parts = [];
-
     private static string $r_str = "a-zA-Z";
     private static string $r_num = "0-9";
     private static string $r_dash = "\-\_";
@@ -15,14 +21,23 @@ class RegexDecoder
     private static string $r_any_echo_mark = "\{\{[^\}\{]*\}\}";
     private static string $r_rest = "(?'rest'.*)";
 
+    /**
+     * @throws Exception
+     */
     public static function decode(string $line): array
     {
-        self::$parts = [];
         $line = self::getTag($line);
         while (!str_starts_with($line, " ")) {
-            $line = self::getAttr($line, "id", "#");
-            $line = self::getAttr($line, "class", ".");
-            $line = self::getAttr($line, "filter", "!");
+            if (!array_key_exists(substr($line, 0, 1), self::$prefixes)) {
+                throw new Exception(
+                    "Sorry but \"" . substr($line, 0, 1) . "\"" .
+                    " is not recognized by Velvet, please add with \"newShortAttribute\" if needed."
+                );
+            }
+
+            $line = self::getAttr($line, "vars", "$");
+            if (isset(self::$parts["attributes"]["vars"])) $line = self::getAttrVars($line);
+            foreach (self::$prefixes as $prefix => $attribute) $line = self::getAttr($line, $attribute, $prefix);
             $line = self::getAttrParenthesis($line);
         }
         self::$parts['rest'] = substr($line, 1);
@@ -92,7 +107,7 @@ class RegexDecoder
         $r = self::regexMaker([
             $name => [
                 "(\\$prefix",
-                "[" . self::r("str") . "]",
+                "[" . self::r("attributes", "str") . "]",
                 "[" . self::r("str", "num", "dash") . "]*",
                 ")*",
                 "suffix" => "?"
@@ -101,21 +116,39 @@ class RegexDecoder
 
         $matches = self::getMatches($r, $line);
 
-        self::addAttribute($name, implode(" ", self::arrayValue($matches[$name], $prefix)));
+        if (isset($matches[$name])) {
+            self::addAttribute($name, implode(" ", self::arrayValue($matches[$name], $prefix)));
+        }
 
         return $matches['rest'] ?? "";
     }
 
-    private static function addAttribute($attribute, $value): void
+    private static function addAttribute(string $attribute, string $value, bool $force = false): void
     {
-        $oldValue = self::$parts["attributes"][$attribute] ?? "";
-        if (!empty($oldValue) && !empty($value)) $oldValue .= " ";
-        self::$parts["attributes"][$attribute] = $oldValue . $value;
+        if ($force || !empty(trim($value))) self::$parts["attributes"][$attribute][] = trim($value);
     }
 
     private static function arrayValue(string $values, string $separator): array
     {
         return explode($separator, substr($values, strlen($separator)));
+    }
+
+    private static function getAttrVars(string $line): string
+    {
+        foreach (self::$parts['attributes']['vars'] as $varName) {
+            $value = Variable::get($varName);
+            if (is_string($value)) $line = $value . $line;
+            elseif (is_array($value)) {
+                foreach ($value as $k => $val) {
+                    if (is_string($val)) self::addAttribute($k, $val);
+                    elseif (is_array($val)) {
+                        foreach ($val as $v) if (is_string($v)) self::addAttribute($k, $v);
+                    }
+                }
+            }
+        }
+        unset(self::$parts['attributes']['vars']);
+        return $line;
     }
 
     private static function getAttrParenthesis(string $line)
@@ -170,7 +203,7 @@ class RegexDecoder
             $value = $match['value'] ?? "";
             $value = Tools::cleanString($value);
             $value = Tools::cleanString($value, "'");
-            self::addAttribute($attribute, $value);
+            self::addAttribute($attribute, $value, (strlen($attribute) > 0));
         }
     }
 }
