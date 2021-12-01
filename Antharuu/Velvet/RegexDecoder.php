@@ -12,6 +12,7 @@ class RegexDecoder
         "!" => "filter"
     ];
     private static array $parts = [];
+    private static string $r_inline = "\|";
     private static string $r_str = "a-zA-Z";
     private static string $r_num = "0-9";
     private static string $r_dash = "\-\_";
@@ -51,7 +52,7 @@ class RegexDecoder
     {
         $r = self::regexMaker([
             "tag" => [
-                "[" . self::r("str") . "]",
+                "[" . self::r("inline", "str") . "]",
                 "[" . self::r("str", "num", "dash") . "]*"
             ],
         ], true);

@@ -6,6 +6,10 @@ require_once "vendor/autoload.php";
 
 $V = new Velvet();
 $V->newShortAttribute("'", "oui");
-$html = $V->parse('h2\'sous-titre Mais oui c\'est clair');
+
+$html = $V->parse(
+    'h1 Hello
+    small world'
+);
 
 dd($html);

@@ -3,11 +3,10 @@
 namespace Antharuu\Velvet;
 
 use Antharuu\Velvet\Elements\HtmlElement;
-use JetBrains\PhpStorm\Pure;
 
 class HtmlConverter
 {
-    #[Pure] public static function convert(HtmlElement $element): string
+    public static function convert(HtmlElement $element): string
     {
         $Html = self::tag($element);
         $Html .= self::content($element);
@@ -35,6 +34,8 @@ class HtmlConverter
 
     private static function content(HtmlElement $element): string
     {
-        return implode("", $element->content);
+        $subElements = [];
+        foreach ($element->block as $subElement) $subElements[] = HtmlConverter::convert($subElement);
+        return $element->content . implode("", $subElements);
     }
 }

@@ -15,7 +15,8 @@ class VelvetTest extends TestCase
         $this->assertEquals([
             "default_path" => "velvet_views",
             "layout_path" => "layout",
-            "used_extensions" => ["pug"]
+            "used_extensions" => ["pug"],
+            "indent_size" => 4
         ], $V::getSettings());
     }
 
@@ -54,6 +55,40 @@ class VelvetTest extends TestCase
 
         $this->assertEquals(
             '<h1 id="title" title="MySuperTitle">Hello world</h1>'
+            , $html);
+    }
+
+    public function testComment()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            '// Oui bonjour'
+        );
+        $this->assertEquals(
+            ''
+            , $html);
+    }
+
+    public function testCommentInline()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            'h1 Hello world // Oui bonjour'
+        );
+        $this->assertEquals(
+            '<h1>Hello world</h1>'
+            , $html);
+    }
+
+    public function testSimpleNesting()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            'h1 Hello 
+    small world'
+        );
+        $this->assertEquals(
+            '<h1>Hello <small>world</small></h1>'
             , $html);
     }
 }
