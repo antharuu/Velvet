@@ -8,7 +8,7 @@ class VelvetTest extends TestCase
 {
     public function testGetSettings()
     {
-        $V = new Velvet([
+        $V = new Velvet(settings: [
             "default_path" => "velvet_views",
             "used_extensions" => ["pug"]
         ]);
@@ -41,6 +41,19 @@ class VelvetTest extends TestCase
 
         $this->assertEquals(
             '<h1 a="1" class="test text-primary bg-dark ok" disabled id="title" z="999">Hello world</h1>'
+            , $html);
+    }
+
+    public function testWithCustomShortAttribute()
+    {
+        $V = new Velvet();
+        $V->newShortAttribute("&", "title");
+        $html = $V->parse(
+            'h1#title&MySuperTitle Hello world'
+        );
+
+        $this->assertEquals(
+            '<h1 id="title" title="MySuperTitle">Hello world</h1>'
             , $html);
     }
 }
