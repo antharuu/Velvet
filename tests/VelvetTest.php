@@ -155,4 +155,16 @@ class VelvetTest extends TestCase
 </div>'
             , $html);
     }
+
+    public function testFilterUpper()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            'h1#title!upper Hello world !
+    small ok ?'
+        );
+        $this->assertEquals(
+            '<h1 id="title">HELLO WORLD !<small>OK ?</small></h1>'
+            , $html);
+    }
 }

@@ -9,6 +9,9 @@ class HtmlElement
     public ?string $subTag = null;
     public array $attributes = [];
 
+    public string $line;
+    public array $lines = [];
+
     public string $content;
     public ?array $block = [];
 

@@ -3,6 +3,10 @@
 namespace Antharuu;
 
 use Antharuu\Velvet\Elements\HtmlElement;
+use Antharuu\Velvet\Filters\LowerFilter;
+use Antharuu\Velvet\Filters\MarkdownFilter;
+use Antharuu\Velvet\Filters\UpperFilter;
+use Antharuu\Velvet\Filters\VelvetFilter;
 use Antharuu\Velvet\HtmlConverter;
 use Antharuu\Velvet\RegexDecoder;
 use Antharuu\Velvet\Variable;
@@ -16,6 +20,12 @@ class Velvet
         "used_extensions" => ["vlvt", "velvet"],
         "indent_size" => 4,
         "minimize" => false
+    ];
+    private static array $filters = [
+        "upper" => UpperFilter::class,
+        "lower" => LowerFilter::class,
+        "md" => MarkdownFilter::class,
+        "markdown" => MarkdownFilter::class,
     ];
 
     public function __construct(
@@ -59,17 +69,19 @@ class Velvet
                 try {
                     $parts = RegexDecoder::decode(ltrim($line));
                     $Element = new HtmlElement($parts);
+                    $Element->line = $line;
                     $Element->indent = $this->getIndent($line);
                     while (isset($lines[0]) &&
                         (
                             $Element->indent < $this->getIndent($lines[0])
                             || empty(trim($lines[0]))
                         )) {
-                        $Element->block[] = substr($lines[0], self::$settings['indent_size']);
+                        $Element->lines[] = substr($lines[0], self::$settings['indent_size']);
                         array_shift($lines);
                     }
                     $Element->indent += $indent + 1;
-                    $Element->block = $this->elementsFrom($Element->block, $Element->indent);
+                    if (isset($Element->attributes['filter'])) $Element = $this->filters($Element);
+                    else $Element->block = $this->elementsFrom($Element->lines, $Element->indent);
                     $Elements[] = $Element;
                 } catch
                 (Exception $e) {
@@ -101,8 +113,35 @@ class Velvet
         return floor((strlen($line) - strlen(ltrim($line))) / self::$settings['indent_size']);
     }
 
+    /**
+     * @throws Exception
+     */
+    private function filters(HtmlElement $Element): HtmlElement
+    {
+        foreach ($Element->attributes['filter'] as $filter_value) {
+            foreach (explode(" ", $filter_value) as $filter) {
+                if (isset(Velvet::$filters[strtolower($filter)])) {
+                    $Filter = new Velvet::$filters[strtolower($filter)]();
+                    if ($Filter instanceof VelvetFilter) {
+                        $Element = $Filter->beforeFiltersElement($Element);
+                        if ($Filter->convertElements) $Element->block =
+                            $this->elementsFrom($Element->lines, $Element->indent);
+                        $Element = $Filter->applyFilter($Element);
+                    } else throw new Exception("Filter \"$filter\" need to extends \"VelvetFilter\" type");
+                } else throw new Exception("Filter \"$filter\" does not exist.");
+            }
+        }
+        unset($Element->attributes['filter']);
+        return $Element;
+    }
+
     public function newShortAttribute(string $shortcutSymbol, string $attributeName): void
     {
         RegexDecoder::$prefixes[$shortcutSymbol] = $attributeName;
+    }
+
+    public function newFilter(string $filterName, VelvetFilter $class): void
+    {
+        Velvet::$filters[strtolower($filterName)] = $class;
     }
 }
