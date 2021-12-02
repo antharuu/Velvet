@@ -99,10 +99,10 @@ class RegexDecoderTest extends TestCase
                 "disabled" => [''],
                 "filter" => ["markdown"],
                 "id" => ["oui", "bonjour"],
-                "test" => ["pas ok", "ok"],
+                "test" => ["pas", "ok"],
             ]
         ], RegexDecoder::decode(
-            "h1#oui.non#bonjour(test='pas ok')!markdown(test=ok disabled) Hello world"
+            "h1#oui.non#bonjour(test='pas')!markdown(test=ok disabled) Hello world"
         ));
     }
 
@@ -120,10 +120,10 @@ class RegexDecoderTest extends TestCase
                 "disabled" => [''],
                 "filter" => ["markdown"],
                 "id" => ["oui", "bonjour"],
-                "test" => ["pas ok", "ok"],
+                "test" => ["pas", "ok"],
             ]
         ], RegexDecoder::decode(
-            "h1#oui.non#bonjour(test='pas ok')!markdown(test=ok disabled)  Hello world"
+            "h1#oui.non#bonjour(test='pas')!markdown(test=ok disabled)  Hello world"
         ));
     }
 

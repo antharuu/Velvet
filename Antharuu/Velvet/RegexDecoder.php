@@ -31,7 +31,6 @@ class RegexDecoder
         self::$r_prefixes = "\\" . implode("\\", array_keys(self::$prefixes));
         self::$parts = [];
         $line = self::getTag($line);
-        dump($line);
         while (!str_starts_with($line, " ") && strlen(trim($line)) > 0) {
             if (!array_key_exists(substr($line, 0, 1),
                 array_merge(self::$prefixes, ["$" => "", "(" => ""]))
@@ -133,7 +132,9 @@ class RegexDecoder
 
     private static function addAttribute(string $attribute, string $value, bool $force = false): void
     {
-        if ($force || !empty(trim($value))) self::$parts["attributes"][$attribute][] = trim($value);
+        if ($force || !empty(trim($value))) {
+            self::$parts["attributes"][$attribute][] = trim($value);
+        }
     }
 
     private static function arrayValue(string $values, string $separator): array
@@ -209,9 +210,30 @@ class RegexDecoder
             $match = Tools::cleanArray($match);
             $attribute = explode("=", $match['name'])[0];
             $value = $match['value'] ?? "";
+            if (str_starts_with($value, "$")) {
+                $newValue = "";
+                foreach (explode("$", $value) as $var) $newValue .= " " . self::stringsOf(Variable::get($var));
+                $value = trim(str_replace("  ", " ", $newValue));
+            }
             $value = Tools::cleanString($value);
             $value = Tools::cleanString($value, "'");
-            self::addAttribute($attribute, $value, (strlen($attribute) > 0));
+            foreach (explode(" ", $value) as $val) {
+                self::addAttribute($attribute, $val, (strlen($attribute) > 0));
+            }
         }
+    }
+
+    private static function stringsOf(mixed $newValue): string
+    {
+        $value = "";
+        if (is_array($newValue)) {
+            foreach ($newValue as $newValue_content) {
+                if (is_string($newValue_content)) $value .= " " . $newValue_content;
+                if (is_array($newValue_content)) $value .= " " . self::stringsOf($newValue_content);
+            }
+        } elseif (is_string($newValue)) {
+            $value .= " " . $newValue;
+        }
+        return $value;
     }
 }

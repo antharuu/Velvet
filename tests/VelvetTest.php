@@ -81,6 +81,19 @@ class VelvetTest extends TestCase
             , $html);
     }
 
+    public function testArrayAttributes()
+    {
+        $V = new Velvet();
+        Variable::add("myH1", ["text-primary", "bg-dark", ["osef", ["mdr", "quoi", ["encore ?"]]]]);
+
+        $html = $V->parse(
+            'h1(class=$myH1) Hello world'
+        );
+        $this->assertEquals(
+            '<h1 class="text-primary bg-dark osef mdr quoi encore ?">Hello world</h1>'
+            , $html);
+    }
+
     public function testSimpleNesting()
     {
         $V = new Velvet();
