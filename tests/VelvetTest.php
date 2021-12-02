@@ -16,7 +16,8 @@ class VelvetTest extends TestCase
             "default_path" => "velvet_views",
             "layout_path" => "layout",
             "used_extensions" => ["pug"],
-            "indent_size" => 4
+            "indent_size" => 4,
+            "minimize" => false
         ], $V::getSettings());
     }
 
@@ -89,6 +90,56 @@ class VelvetTest extends TestCase
         );
         $this->assertEquals(
             '<h1>Hello <small>world</small></h1>'
+            , $html);
+    }
+
+    public function testMultipleNesting()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            'h1 Hello 
+    small world
+    | !
+    span#sub-title How 
+        span.are are 
+            span you
+        | ?'
+        );
+        $this->assertEquals(
+            '<h1>Hello <small>world</small>!<span id="sub-title">How <span class="are">are <span>you</span></span>?</span></h1>'
+            , $html);
+    }
+
+    public function testFormatNesting()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            '#box
+    #sub-box
+        #sub-sub-box-1
+            h1#title Hello World !
+        #sub-sub-box-2
+            #sub-sub-sub-box
+                h2#sub-title Como esta ?
+        #sub-sub-box-3
+            h3#sub-sub-title Oui.'
+        );
+        $this->assertEquals(
+            '<div id="box">
+    <div id="sub-box">
+        <div id="sub-sub-box-1">
+            <h1 id="title">Hello World !</h1>
+        </div>
+        <div id="sub-sub-box-2">
+            <div id="sub-sub-sub-box">
+                <h2 id="sub-title">Como esta ?</h2>
+            </div>
+        </div>
+        <div id="sub-sub-box-3">
+            <h3 id="sub-sub-title">Oui.</h3>
+        </div>
+    </div>
+</div>'
             , $html);
     }
 }

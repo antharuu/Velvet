@@ -14,7 +14,8 @@ class Velvet
         "default_path" => "views",
         "layout_path" => "layout",
         "used_extensions" => ["vlvt", "velvet"],
-        "indent_size" => 4
+        "indent_size" => 4,
+        "minimize" => false
     ];
 
     public function __construct(
@@ -40,11 +41,13 @@ class Velvet
 
         $Html = [];
         foreach ($Elements as $element) $Html[] = HtmlConverter::convert($element);
+        $Html = implode("\n", $Html);
 
-        return implode("\n", $Html);
+        if (str_ends_with($Html, "\n")) $Html = substr($Html, 0, -1);
+        return $Html;
     }
 
-    private function elementsFrom(string|array $lines): array
+    private function elementsFrom(string|array $lines, $indent = 0): array
     {
         $Elements = [];
         if (is_string($lines)) $lines = explode("\n", $lines);
@@ -57,14 +60,16 @@ class Velvet
                     $parts = RegexDecoder::decode($line);
                     $Element = new HtmlElement($parts);
                     $Element->indent = $this->getIndent($line);
-                    while (
-                        isset($lines[0]) &&
-                        $Element->indent < $this->getIndent($lines[0])
-                    ) {
+                    while (isset($lines[0]) &&
+                        (
+                            $Element->indent < $this->getIndent($lines[0])
+                            || empty(trim($lines[0]))
+                        )) {
                         $Element->block[] = substr($lines[0], self::$settings['indent_size']);
                         array_shift($lines);
                     }
-                    $Element->block = $this->elementsFrom($Element->block);
+                    $Element->indent += $indent + 1;
+                    $Element->block = $this->elementsFrom($Element->block, $Element->indent);
                     $Elements[] = $Element;
                 } catch
                 (Exception $e) {

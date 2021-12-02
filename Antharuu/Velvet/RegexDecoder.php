@@ -20,6 +20,7 @@ class RegexDecoder
     private static string $r_any_double_quote = "\\\"[^\\\"]*\\\"";
     private static string $r_any_simple_quote = "\'[^\']*\'";
     private static string $r_any_echo_mark = "\{\{[^\}\{]*\}\}";
+    private static string $r_prefixes = "";
     private static string $r_rest = "(?'rest'.*)";
 
     /**
@@ -27,9 +28,10 @@ class RegexDecoder
      */
     public static function decode(string $line): array
     {
+        self::$r_prefixes = "\\" . implode("\\", array_keys(self::$prefixes));
         self::$parts = [];
         $line = self::getTag($line);
-        while (!str_starts_with($line, " ")) {
+        while (!str_starts_with($line, " ") && strlen(trim($line)) > 0) {
             if (!array_key_exists(substr($line, 0, 1),
                 array_merge(self::$prefixes, ["$" => ""]))
             ) {
@@ -53,14 +55,15 @@ class RegexDecoder
         $r = self::regexMaker([
             "tag" => [
                 "[" . self::r("inline", "str") . "]",
-                "[" . self::r("str", "num", "dash") . "]*"
+                "[" . self::r("str", "num", "dash") . "]*",
+                "suffix" => "?"
             ],
         ], true);
         $matches = self::getMatches($r, $line);
 
-        self::$parts['tag'] = $matches['tag'];
+        self::$parts['tag'] = (isset($matches['tag']) && !empty($matches['tag'])) ? $matches['tag'] : "div";
 
-        return $matches['rest'] ?? "";
+        return (isset($matches['rest']) && !empty($matches['rest'])) ? $matches['rest'] : "";
     }
 
     private static function regexMaker(
