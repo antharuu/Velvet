@@ -145,4 +145,22 @@ class RegexDecoderTest extends TestCase
             'h1$myH1  Hello world'
         ));
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testSimpleValueVariable()
+    {
+        Variable::add("myH1", ["text-primary", "bg-dark"]);
+
+        $this->assertEquals([
+            "tag" => "h1",
+            "rest" => " Hello world",
+            "attributes" => [
+                "class" => ["text-primary", "bg-dark"]
+            ]
+        ], RegexDecoder::decode(
+            'h1(class=$myH1)  Hello world'
+        ));
+    }
 }

@@ -1,25 +1,15 @@
 <?php
 
 use Antharuu\Velvet;
+use Antharuu\Velvet\Variable;
 
 require_once "vendor/autoload.php";
 
 $V = new Velvet();
+Variable::add("myH1", ["text-primary", "bg-dark"]);
 
 $html = $V->parse(
-    '#box
-    #sub-box
-        #sub-sub-box-1
-            h1#title Hello World !
-        #sub-sub-box-2
-        
-            #sub-sub-sub-box
-            
-                h2#sub-title Como esta ?
-                    span
-            #osef
-        #sub-sub-box-3
-            h3#sub-sub-title Oui.'
+    'h1(class="myH1") Hello world'
 );
 
 dd($html);

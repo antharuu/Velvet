@@ -57,7 +57,7 @@ class Velvet
             array_shift($lines);
             if ($this->notEmpty($line)) {
                 try {
-                    $parts = RegexDecoder::decode($line);
+                    $parts = RegexDecoder::decode(ltrim($line));
                     $Element = new HtmlElement($parts);
                     $Element->indent = $this->getIndent($line);
                     while (isset($lines[0]) &&

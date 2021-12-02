@@ -31,9 +31,10 @@ class RegexDecoder
         self::$r_prefixes = "\\" . implode("\\", array_keys(self::$prefixes));
         self::$parts = [];
         $line = self::getTag($line);
+        dump($line);
         while (!str_starts_with($line, " ") && strlen(trim($line)) > 0) {
             if (!array_key_exists(substr($line, 0, 1),
-                array_merge(self::$prefixes, ["$" => ""]))
+                array_merge(self::$prefixes, ["$" => "", "(" => ""]))
             ) {
                 throw new Exception(
                     "Sorry but \"" . substr($line, 0, 1) . "\"" .
