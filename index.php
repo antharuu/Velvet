@@ -4,11 +4,14 @@ use Antharuu\Velvet;
 
 require_once "vendor/autoload.php";
 
-$V = new Velvet(["name" => "Anthony"]);
+$V = new Velvet();
 
 $html = $V->parse(
-    'h1= Hello $name {{ \'(my name is in $name)\' }}
-h2 Here is my $a = {{md5($a * 56484654) . " - \"\'???\'\""}}'
+    '? $a = true
+if $a
+    h1 Hello A
+else
+    h1 Hello B'
 );
 
 dd($html);

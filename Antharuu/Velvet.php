@@ -2,20 +2,14 @@
 
 namespace Antharuu;
 
-use Antharuu\Velvet\Elements\HtmlElement;
-use Antharuu\Velvet\Filters\LowerFilter;
-use Antharuu\Velvet\Filters\MarkdownFilter;
-use Antharuu\Velvet\Filters\UpperFilter;
-use Antharuu\Velvet\Filters\VelvetFilter;
-use Antharuu\Velvet\HtmlConverter;
-use Antharuu\Velvet\RegexDecoder;
-use Antharuu\Velvet\Tools;
-use Antharuu\Velvet\Variable;
+use Antharuu\Velvet\{Elements\HtmlElement, HtmlConverter, RegexDecoder, Tools, Variable};
+use Antharuu\Velvet\{Filters\LowerFilter, Filters\MarkdownFilter, Filters\UpperFilter, Filters\VelvetFilter};
 use Exception;
 
 class Velvet
 {
     public static string $separator = "#!:%~|~%:!#";
+
     protected static array $settings = [
         "default_path" => "views",
         "layout_path" => "layout",
@@ -23,6 +17,7 @@ class Velvet
         "indent_size" => 4,
         "minimize" => false
     ];
+
     private static array $filters = [
         "upper" => UpperFilter::class,
         "lower" => LowerFilter::class,
@@ -70,22 +65,9 @@ class Velvet
             if ($this->notEmpty($line)) {
                 try {
                     $parts = RegexDecoder::decode(ltrim($line));
+                    if ($parts['code'] ?? false) continue;
                     $parts = Tools::echoContent($parts);
-                    $Element = new HtmlElement($parts);
-                    $Element->line = $line;
-                    $Element->indent = $this->getIndent($line);
-                    while (isset($lines[0]) &&
-                        (
-                            $Element->indent < $this->getIndent($lines[0])
-                            || empty(trim($lines[0]))
-                        )) {
-                        $Element->lines[] = substr($lines[0], self::$settings['indent_size']);
-                        array_shift($lines);
-                    }
-                    $Element->indent += $indent + 1;
-                    if (isset($Element->attributes['filter'])) $Element = $this->filters($Element);
-                    else $Element->block = $this->elementsFrom($Element->lines, $Element->indent);
-                    $Elements[] = $Element;
+                    $Elements[] = self::createElement($line, $parts);
                 } catch
                 (Exception $e) {
                     echo "<strong>VELVET DECODER ERROR</strong>: " . $e->getMessage() . "\n\n";
@@ -109,6 +91,25 @@ class Velvet
     private function notEmpty(string $line): bool
     {
         return !empty(ltrim($line));
+    }
+
+    private function createElement(mixed $line, array $parts): HtmlElement
+    {
+        $Element = new HtmlElement($parts);
+        $Element->line = $line;
+        $Element->indent = $this->getIndent($line);
+        while (isset($lines[0]) &&
+            (
+                $Element->indent < $this->getIndent($lines[0])
+                || empty(trim($lines[0]))
+            )) {
+            $Element->lines[] = substr($lines[0], self::$settings['indent_size']);
+            array_shift($lines);
+        }
+        $Element->indent += $indent + 1;
+        if (isset($Element->attributes['filter'])) $Element = $this->filters($Element);
+        else $Element->block = $this->elementsFrom($Element->lines, $Element->indent);
+        return $Element;
     }
 
     public static function getIndent(string $line): int

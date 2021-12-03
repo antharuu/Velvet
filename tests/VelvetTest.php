@@ -167,4 +167,20 @@ class VelvetTest extends TestCase
             '<h1 id="title">HELLO WORLD !<small>OK ?</small></h1>'
             , $html);
     }
+
+    public function testSimpleCodeVar()
+    {
+        $V = new Velvet();
+        $html = $V->parse(
+            '$a = "World"
+? $b = 8745465 * 2
+h1= Hello $a
+    small (Ouais mais y\'a aussi $b :
+        =  $b
+        | )'
+        );
+        $this->assertEquals(
+            '<h1>Hello World<small>(Ouais mais y\'a aussi $b : 17490930)</small></h1>'
+            , $html);
+    }
 }

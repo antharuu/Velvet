@@ -47,7 +47,8 @@ class Tools
 
         $returned = [];
         foreach ($partsString as $str) {
-            if (str_starts_with($str, "{{") && str_ends_with($str, "}}")) $returned[] = self::echo(substr($str, 2, -2), false);
+            if (str_starts_with($str, "{{") && str_ends_with($str, "}}")) $returned[] =
+                self::echo(substr($str, 2, -2), false);
             else $returned[] = $echoAll ? self::echo($str) : $str;
         }
         return implode("", $returned);
@@ -57,5 +58,12 @@ class Tools
     {
         foreach (Variable::getAll() as $variableName => $variableValue) $$variableName = $variableValue;
         return $quoted ? eval("return \"$string\";") : eval("return $string;");
+    }
+
+    public static function execute(string $executableCode): void
+    {
+        eval("return $executableCode;");
+        unset($executableCode);
+        Variable::addMultiple(get_defined_vars());
     }
 }

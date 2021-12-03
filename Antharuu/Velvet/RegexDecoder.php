@@ -12,6 +12,7 @@ class RegexDecoder
         "!" => "filter"
     ];
     private static array $parts = [];
+
     private static string $r_inline = "\|";
     private static string $r_str = "a-zA-Z";
     private static string $r_num = "0-9";
@@ -23,6 +24,12 @@ class RegexDecoder
     private static string $r_prefixes = "";
     private static string $r_rest = "(?'rest'.*)";
 
+    private static array $compatibles = [
+        "=" => "|=",
+        "?" => "|?",
+        "$" => "|?$"
+    ];
+
     /**
      * @throws Exception
      */
@@ -32,30 +39,27 @@ class RegexDecoder
         self::$parts = [];
         $line = self::getTag($line);
         $oldLine = null;
-        while (!str_starts_with($line, " ") && strlen(trim($line)) > 0) {
-            if ($oldLine !== $line) {
-                if (!array_key_exists(substr($line, 0, 1),
-                    array_merge(self::$prefixes, ["$" => "", "(" => ""]))
-                ) {
-                    if (str_starts_with($line, "= ")) {
-                        self::$parts['echo'] = true;
-                        $line = substr($line, 1);
-                    } else {
-                        throw new Exception(
-                            "Sorry but \"" . substr($line, 0, 1) . "\"" .
-                            " is not recognized by Velvet, please add with \"newShortAttribute\" if needed."
-                        );
-                    }
-                }
 
+        if (str_starts_with($line, "?")) {
+            self::$parts['code'] = true;
+            $line = substr($line, 1);
+        }
+        if (self::$parts['code'] ?? false) {
+            $line = Tools::execute($line) ?? "";
+        } else {
+            while (!str_starts_with($line, " ") &&
+                strlen(trim($line)) > 0 &&
+                $oldLine !== $line
+            ) {
+                $oldLine = $line;
+                $line = self::checkIfExistPrefix($line);
                 $line = self::getAttr($line, "vars", "$");
-                if (isset(self::$parts["attributes"]["vars"])) $line = self::getAttrVars($line);
+                if (self::$parts["attributes"]["vars"] ?? false) $line = self::getAttrVars($line);
                 foreach (self::$prefixes as $prefix => $attribute) $line = self::getAttr($line, $attribute, $prefix);
                 $line = self::getAttrParenthesis($line);
-                $oldLine = $line;
             }
         }
-        self::$parts['rest'] = substr($line, 1);
+        self::$parts['rest'] = (str_starts_with($line, " ")) ? substr($line, 1) : $line;
         return self::$parts;
     }
 
@@ -68,7 +72,7 @@ class RegexDecoder
                 "suffix" => "?"
             ],
         ], true);
-        if (str_starts_with($line, "=")) $line = "|" . $line;
+        $line = self::replaceCompatibles($line);
         $matches = self::getMatches($r, $line);
 
         self::$parts['tag'] = (isset($matches['tag']) && !empty($matches['tag'])) ? $matches['tag'] : "div";
@@ -113,10 +117,39 @@ class RegexDecoder
         return $result;
     }
 
+    private static function replaceCompatibles(string $line): string
+    {
+        foreach (self::$compatibles as $symbol => $replace)
+            if (str_starts_with($line, $symbol)) $line =
+                $replace . substr($line, strlen($symbol));
+        return $line;
+    }
+
     private static function getMatches(string $r, string $line): array
     {
         preg_match($r, $line, $matches);
         return Tools::cleanArray($matches);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private static function checkIfExistPrefix(mixed $line)
+    {
+        if (!array_key_exists(substr($line, 0, 1),
+            array_merge(self::$prefixes, ["$" => "", "(" => ""]))
+        ) {
+            if (str_starts_with($line, "= ")) {
+                self::$parts['echo'] = true;
+                return substr($line, 1);
+            } else {
+                throw new Exception(
+                    "Sorry but \"" . substr($line, 0, 1) . "\"" .
+                    " is not recognized by Velvet, please add with \"newShortAttribute\" if needed."
+                );
+            }
+        }
+        return $line;
     }
 
     private static function getAttr(string $line, $name, $prefix): string
@@ -133,9 +166,8 @@ class RegexDecoder
 
         $matches = self::getMatches($r, $line);
 
-        if (isset($matches[$name])) {
+        if (isset($matches[$name]))
             self::addAttribute($name, implode(" ", self::arrayValue($matches[$name], $prefix)));
-        }
 
         return $matches['rest'] ?? "";
     }

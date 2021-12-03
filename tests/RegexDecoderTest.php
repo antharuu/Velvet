@@ -81,7 +81,7 @@ class RegexDecoderTest extends TestCase
             "attributes" => [
                 "class" => ["text-header", "text-center"],
                 "filter" => ["markdown"],
-                "id" => ["title"],
+                "id" => ["title"]
             ]
         ], RegexDecoder::decode("h1.text-header#title!markdown.text-center Hello world"));
     }
