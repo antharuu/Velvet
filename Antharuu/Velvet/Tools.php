@@ -2,6 +2,9 @@
 
 namespace Antharuu\Velvet;
 
+use Antharuu\Velvet;
+use Exception;
+
 class Tools
 {
 
@@ -23,5 +26,36 @@ class Tools
         $newArray = [];
         foreach ($array as $k => $match) if (is_string($k)) $newArray[$k] = $match;
         return $newArray;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function echoContent(array $parts): array
+    {
+        $parts['rest'] =
+            self::echoParse($parts['rest'], ($parts['echo'] ?? false));
+
+        return $parts;
+    }
+
+    private static function echoParse(string $string, bool $echoAll = false): string
+    {
+        $string = str_replace("{{", Velvet::$separator . "{{", $string);
+        $string = str_replace("}}", "}}" . Velvet::$separator, $string);
+        $partsString = explode(Velvet::$separator, $string);
+
+        $returned = [];
+        foreach ($partsString as $str) {
+            if (str_starts_with($str, "{{") && str_ends_with($str, "}}")) $returned[] = self::echo(substr($str, 2, -2), false);
+            else $returned[] = $echoAll ? self::echo($str) : $str;
+        }
+        return implode("", $returned);
+    }
+
+    private static function echo(string $string, bool $quoted = true): string
+    {
+        foreach (Variable::getAll() as $variableName => $variableValue) $$variableName = $variableValue;
+        return $quoted ? eval("return \"$string\";") : eval("return $string;");
     }
 }

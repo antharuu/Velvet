@@ -9,11 +9,13 @@ use Antharuu\Velvet\Filters\UpperFilter;
 use Antharuu\Velvet\Filters\VelvetFilter;
 use Antharuu\Velvet\HtmlConverter;
 use Antharuu\Velvet\RegexDecoder;
+use Antharuu\Velvet\Tools;
 use Antharuu\Velvet\Variable;
 use Exception;
 
 class Velvet
 {
+    public static string $separator = "#!:%~|~%:!#";
     protected static array $settings = [
         "default_path" => "views",
         "layout_path" => "layout",
@@ -68,6 +70,7 @@ class Velvet
             if ($this->notEmpty($line)) {
                 try {
                     $parts = RegexDecoder::decode(ltrim($line));
+                    $parts = Tools::echoContent($parts);
                     $Element = new HtmlElement($parts);
                     $Element->line = $line;
                     $Element->indent = $this->getIndent($line);

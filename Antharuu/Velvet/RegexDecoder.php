@@ -31,20 +31,29 @@ class RegexDecoder
         self::$r_prefixes = "\\" . implode("\\", array_keys(self::$prefixes));
         self::$parts = [];
         $line = self::getTag($line);
+        $oldLine = null;
         while (!str_starts_with($line, " ") && strlen(trim($line)) > 0) {
-            if (!array_key_exists(substr($line, 0, 1),
-                array_merge(self::$prefixes, ["$" => "", "(" => ""]))
-            ) {
-                throw new Exception(
-                    "Sorry but \"" . substr($line, 0, 1) . "\"" .
-                    " is not recognized by Velvet, please add with \"newShortAttribute\" if needed."
-                );
-            }
+            if ($oldLine !== $line) {
+                if (!array_key_exists(substr($line, 0, 1),
+                    array_merge(self::$prefixes, ["$" => "", "(" => ""]))
+                ) {
+                    if (str_starts_with($line, "= ")) {
+                        self::$parts['echo'] = true;
+                        $line = substr($line, 1);
+                    } else {
+                        throw new Exception(
+                            "Sorry but \"" . substr($line, 0, 1) . "\"" .
+                            " is not recognized by Velvet, please add with \"newShortAttribute\" if needed."
+                        );
+                    }
+                }
 
-            $line = self::getAttr($line, "vars", "$");
-            if (isset(self::$parts["attributes"]["vars"])) $line = self::getAttrVars($line);
-            foreach (self::$prefixes as $prefix => $attribute) $line = self::getAttr($line, $attribute, $prefix);
-            $line = self::getAttrParenthesis($line);
+                $line = self::getAttr($line, "vars", "$");
+                if (isset(self::$parts["attributes"]["vars"])) $line = self::getAttrVars($line);
+                foreach (self::$prefixes as $prefix => $attribute) $line = self::getAttr($line, $attribute, $prefix);
+                $line = self::getAttrParenthesis($line);
+                $oldLine = $line;
+            }
         }
         self::$parts['rest'] = substr($line, 1);
         return self::$parts;
@@ -59,6 +68,7 @@ class RegexDecoder
                 "suffix" => "?"
             ],
         ], true);
+        if (str_starts_with($line, "=")) $line = "|" . $line;
         $matches = self::getMatches($r, $line);
 
         self::$parts['tag'] = (isset($matches['tag']) && !empty($matches['tag'])) ? $matches['tag'] : "div";

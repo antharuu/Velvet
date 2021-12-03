@@ -17,7 +17,7 @@ class Variable
         return self::getAll($scope)[$varName] ?? null;
     }
 
-    private static function getAll(int $scope = 0): array
+    public static function getAll(int $scope = 0): array
     {
         $returnedVariables = [];
         foreach (self::$variables as $sc => $vars) {
