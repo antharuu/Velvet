@@ -4,6 +4,8 @@ namespace Antharuu\Velvet\Filters;
 
 use Antharuu\Velvet\Elements\HtmlElement;
 use Antharuu\Velvet\Interfaces\FilterInterface;
+use Antharuu\Velvet\RegexDecoder;
+use Exception;
 
 class VelvetFilter implements FilterInterface
 {
@@ -14,7 +16,6 @@ class VelvetFilter implements FilterInterface
     {
         $Element->content = $this->filterContent($Element->content);
         $Element->lines = array_map([$this, "filterLines"], $Element->lines);
-        $Element->block = array_map([$this, "filterElements"], $Element->block);
 
         return $Element;
     }
@@ -24,14 +25,29 @@ class VelvetFilter implements FilterInterface
         return $content;
     }
 
+    public function applyFilterElement(HtmlElement $Element): HtmlElement
+    {
+        $Element->block = array_map([$this, "filterElements"], $Element->block);
+
+        return $Element;
+    }
+
     public function beforeFiltersElement(HtmlElement $element): HtmlElement
     {
         return $element;
     }
 
+    /**
+     * @throws Exception
+     */
     public function filterLines(string $line): string
     {
-        return ($this->linesAsContent) ? $this->filterContent($line) : $line;
+        if (($this->linesAsContent)) {
+            $rest = $this->filterContent(RegexDecoder::decode($line)['rest'] ?? "");
+            $line = substr($line, 0, -strlen($rest)) . $rest;
+        }
+
+        return $line;
     }
 
     public function filterElements(HtmlElement $element): HtmlElement

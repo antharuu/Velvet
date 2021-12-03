@@ -124,9 +124,10 @@ class Velvet
                     $Filter = new Velvet::$filters[strtolower($filter)]();
                     if ($Filter instanceof VelvetFilter) {
                         $Element = $Filter->beforeFiltersElement($Element);
+                        $Element = $Filter->applyFilter($Element);
                         if ($Filter->convertElements) $Element->block =
                             $this->elementsFrom($Element->lines, $Element->indent);
-                        $Element = $Filter->applyFilter($Element);
+                        $Element = $Filter->applyFilterElement($Element);
                     } else throw new Exception("Filter \"$filter\" need to extends \"VelvetFilter\" type");
                 } else throw new Exception("Filter \"$filter\" does not exist.");
             }
