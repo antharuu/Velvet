@@ -17,7 +17,8 @@ class VelvetTest extends TestCase
             "layout_path" => "layout",
             "used_extensions" => ["pug"],
             "indent_size" => 4,
-            "minimize" => false
+            "minimize" => false,
+            'separator' => '#!:%~|~%:!#'
         ], $V::getSettings());
     }
 

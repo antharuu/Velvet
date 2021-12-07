@@ -41,9 +41,9 @@ class Tools
 
     private static function echoParse(string $string, bool $echoAll = false): string
     {
-        $string = str_replace("{{", Velvet::$separator . "{{", $string);
-        $string = str_replace("}}", "}}" . Velvet::$separator, $string);
-        $partsString = explode(Velvet::$separator, $string);
+        $string = str_replace("{{", Velvet::getSetting("separator") . "{{", $string);
+        $string = str_replace("}}", "}}" . Velvet::getSetting("separator"), $string);
+        $partsString = explode(Velvet::getSetting("separator"), $string);
 
         $returned = [];
         foreach ($partsString as $str) {

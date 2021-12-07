@@ -80,6 +80,7 @@ class HtmlConverter
     #[Pure] public static function indent(HtmlElement $element, int $plus = 0): string
     {
         $indent = ($element->indent ?? 0) + $plus;
+        $indent = max($indent, 0);
         return str_repeat(str_repeat(" ", Velvet::getSettings()['indent_size']), $indent);
     }
 
