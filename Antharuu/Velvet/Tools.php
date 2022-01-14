@@ -14,7 +14,7 @@ class Tools
         string $endCharacter = null
     ): string
     {
-        $endCharacter = $endCharacter ?? $startCharacter;
+        $endCharacter ??= $startCharacter;
 
         return (str_starts_with($string, $startCharacter)
             && str_ends_with($string, $endCharacter)) ? substr($string,
@@ -56,7 +56,7 @@ class Tools
 
     private static function echo(string $string, bool $quoted = true): string
     {
-        foreach (Variable::getAll() as $variableName => $variableValue) $$variableName = $variableValue;
+        foreach (Variable::getAll() as $variableName => $variableValue) ${$variableName} = $variableValue;
         return $quoted ? eval("return \"$string\";") : eval("return $string;");
     }
 

@@ -89,7 +89,7 @@ class HtmlConverter
         $attributes = [];
         ksort($element->attributes, SORT_DESC);
         foreach ($element->attributes as $attribute => $values) {
-            if (count($values) === 1 && empty($values[0])) $attributes[] = "$attribute";
+            if ((is_countable($values) ? count($values) : 0) === 1 && empty($values[0])) $attributes[] = "$attribute";
             else $attributes[] = "$attribute=\"" . implode(" ", $values) . "\"";
         }
         $attributes = implode(" ", $attributes);
