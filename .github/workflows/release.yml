@@ -1,0 +1,14 @@
+name: Release & Publish to NPM
+
+on: workflow_dispatch
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source code
+        use: actions/checkout@v2
+      - name: Install the dependancies
+        run: yarn install --frozen-lockfile
+      - name: End message
+        run: echo 'All done !'
