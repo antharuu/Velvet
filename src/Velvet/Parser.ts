@@ -1,12 +1,18 @@
 import { error } from "./Error";
 import { LineRegex, RegexParse } from "./Regex";
-import { AST, VNode, VTag } from "./Types/AST";
+import { AST, VTag } from "./Types/AST";
+import { Config, DefaultConfig } from "./Types/Config";
 
 export default class Parser {
   ast: AST;
   lines: string[];
+  config: Config;
 
-  constructor(velvetcode: string) {
+  constructor(velvetcode: string, config: Config = {}) {
+    this.config = {
+      ...config,
+      ...DefaultConfig,
+    };
     this.ast = [];
     this.lines = [];
     this.setAST(velvetcode);
