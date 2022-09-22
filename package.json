@@ -1,24 +1,20 @@
 {
-  "name": "velvet-lang",
-  "description": "Velvet is a HTML preprocessor, converting Velvet language (PUGjs like) to HTML.",
-  "version": "0.0.7",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest --globals --",
-    "prod": "release-it"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.0.3",
-    "@types/node-fetch": "2.x",
-    "release-it": "^15.4.2",
-    "typescript": "^4.6.4",
-    "vite": "^3.1.0",
-    "vitest": "^0.23.4"
-  },
-  "dependencies": {
-    "node-fetch": "^3.2.10"
-  }
+	"name": "velvet-lang",
+	"description": "Velvet is a HTML preprocessor, converting Velvet language (PUGjs like) to HTML.",
+	"version": "0.0.7",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"test": "vitest --globals --",
+		"prod": "release-it"
+	},
+	"devDependencies": {
+		"@types/jest": "^29.0.3",
+		"release-it": "^15.4.2",
+		"typescript": "^4.6.4",
+		"vite": "^3.1.0",
+		"vitest": "^0.23.4"
+	}
 }
