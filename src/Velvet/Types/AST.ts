@@ -8,7 +8,7 @@ export type VTag = {
   tag: string;
   childs?: AST;
   attributes?: VAttributes[];
-  __rest?: any; // Developpement only
+  indent: number;
 };
 
 export type VAttributes = {

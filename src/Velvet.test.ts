@@ -15,3 +15,11 @@ test("Remove empty lines", () => {
   ).toBe(`<h1>Hello world</h1>
 <h2>How are you ?</h2>`);
 });
+
+test.skip("Simple sub tab", () => {
+  expect(
+    Velvet.parse(`h1
+  span Hello world
+`)
+  ).toBe(`<h1><span>Hello world</span></h1>`);
+});

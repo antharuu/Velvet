@@ -14,6 +14,7 @@ export default class Parser {
 
   setAST(velvetcode: string) {
     this.lines = velvetcode.split("\n");
+    let indent = 0;
     this.lines.forEach((line: string, i: number): void => {
       line = line.trim();
       if (line.length > 0) {
@@ -21,7 +22,7 @@ export default class Parser {
         if (r === null) {
           error("Parser", `Cant parse the #${i} line: "${line}"`);
         } else {
-          const node: VTag = { tag: r.tag.trim(), childs: [r.rest] };
+          const node: VTag = { tag: r.tag.trim(), childs: [r.rest], indent };
           this.ast.push(node);
         }
       }
