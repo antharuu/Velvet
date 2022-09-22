@@ -15,14 +15,15 @@ export default class Parser {
   setAST(velvetcode: string) {
     this.lines = velvetcode.split("\n");
     this.lines.forEach((line: string, i: number): void => {
-      console.count("Line");
-      console.log(line);
-      const r = RegexParse(line, LineRegex);
-      if (r === null) {
-        error("Parser", `Cant parse the #${i} line: "${line}"`);
-      } else {
-        const node: VTag = { tag: r.tag.trim(), childs: [r.rest] };
-        this.ast.push(node);
+      line = line.trim();
+      if (line.length > 0) {
+        const r = RegexParse(line, LineRegex);
+        if (r === null) {
+          error("Parser", `Cant parse the #${i} line: "${line}"`);
+        } else {
+          const node: VTag = { tag: r.tag.trim(), childs: [r.rest] };
+          this.ast.push(node);
+        }
       }
     });
   }

@@ -5,10 +5,10 @@ export default class Converter {
     let html = "";
 
     ast.forEach((node: VNode) => {
-      html += Converter.getHtmlFromLine(node);
+      html += "\n" + Converter.getHtmlFromLine(node);
     });
 
-    return html;
+    return html.trim();
   }
 
   static getHtmlFromLine(node: VNode): string {
