@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest --globals --"
+    "test": "vitest --globals --",
+    "prod": "release-it"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
     "@types/node-fetch": "2.x",
+    "release-it": "^15.4.2",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
     "vitest": "^0.23.4"
