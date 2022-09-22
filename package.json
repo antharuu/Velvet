@@ -1,7 +1,7 @@
 {
   "name": "velvet-lang",
   "description": "Velvet is a HTML preprocessor, converting Velvet language (PUGjs like) to HTML.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
