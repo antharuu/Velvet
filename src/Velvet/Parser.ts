@@ -33,7 +33,6 @@ export default class Parser {
 	setAST(velvetCode: string) {
 		this.lines = velvetCode.split("\n");
 		let indent = 0;
-		let blockChilds: AST = [];
 		this.lines.forEach((line: string, i: number): void => {
 			indent = this.getIdent(line);
 			line = line.trimStart();
@@ -63,9 +62,11 @@ export default class Parser {
 			tab = /^(    )/;
 		}
 
-		while (tab.test(line)) {
-			indent++;
-			line.replace(tab, "");
+		if (line.length !== line.trim().length) {
+			while (tab.test(line)) {
+				indent++;
+				line = line.replace(tab, "");
+			}
 		}
 
 		return indent;

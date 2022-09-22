@@ -16,7 +16,7 @@ test("Remove empty lines", () => {
 <h2>How are you ?</h2>`);
 });
 
-test.skip("Simple sub tab", () => {
+test.todo("Simple sub tab", () => {
 	expect(
 		Velvet.parse(`h1
 	span Hello world
