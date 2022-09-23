@@ -1,8 +1,19 @@
-import Parser from "./Parser";
-import { AST } from "./Types/AST";
+import { getIdent } from "./Tools";
 
-test("Get simple h1 AST", () => {
-  const P = new Parser("h1 Hello world");
-  const wantedAST: AST = [{ tag: "h1", childs: ["Hello world"] }];
-  expect(P.getAST()).toStrictEqual(wantedAST);
+describe("Indentation", () => {
+	test("With tabsize: tab", () => {
+		expect(getIdent("h1 Hello world", "tab")).toEqual(0);
+		expect(getIdent("	h1 Hello world", "tab")).toEqual(1);
+		expect(getIdent("		h1 Hello world", "tab")).toEqual(2);
+	});
+	test("With tabsize: 2", () => {
+		expect(getIdent("h1 Hello world", 2)).toEqual(0);
+		expect(getIdent("  h1 Hello world", 2)).toEqual(1);
+		expect(getIdent("    h1 Hello world", 2)).toEqual(2);
+	});
+	test("With tabsize: 4", () => {
+		expect(getIdent("h1 Hello world", 4)).toEqual(0);
+		expect(getIdent("    h1 Hello world", 4)).toEqual(1);
+		expect(getIdent("        h1 Hello world", 4)).toEqual(2);
+	});
 });

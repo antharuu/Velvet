@@ -1,6 +1,13 @@
 name: Release & Publish to NPM
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - master
+      - dev
 
 jobs:
   release:
