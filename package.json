@@ -7,9 +7,9 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"test": "vitest --globals",
-		"test:ui": "npx vitest --globals --ui",
-		"test:cover": "npx vitest --globals --coverage",
+		"test": "vitest --globals --sequence.shuffle",
+		"test:ui": "npx vitest --globals --ui --sequence.shuffle",
+		"test:cover": "npx vitest --globals --coverage --sequence.shuffle",
 		"prod": "release-it",
 		"clean": "rm -rf node_modules"
 	},
