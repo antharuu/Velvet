@@ -1,3 +1,4 @@
+import { TempBlock } from "./Types/AST";
 import { DefaultConfig, TabSize } from "./Types/Config";
 
 /**
@@ -7,9 +8,19 @@ import { DefaultConfig, TabSize } from "./Types/Config";
  * @param tabSize tab size in config
  * @return indent
  */
-export function getIdent(line: string, tabSize: TabSize | undefined): number {
-	const tab = getTabRegex(tabSize);
-	let indent = 0;
+export function getIndentOf(
+	line: string,
+	tabSize: TabSize | undefined = undefined
+): number {
+	if (!tabSize) tabSize = DefaultConfig.tabSize;
+
+	let tab = /^(\t)/,
+		indent = 0;
+	if (tabSize === 2) {
+		tab = /^(  )/;
+	} else if (tabSize === 4) {
+		tab = /^(    )/;
+	}
 
 	if (line.length !== line.trim().length) {
 		while (tab.test(line)) {
@@ -22,33 +33,33 @@ export function getIdent(line: string, tabSize: TabSize | undefined): number {
 }
 
 /**
- * Remove one indentation to line
+ * Get the usable blocks from string
  *
- * @param line input line
- * @param tabSize tab size
- * @returns line with -1 indentation
+ * @param velvetCode input velvet code
+ * @returns array of blocks
  */
-export function removeIndent(
-	line: string,
-	tabSize: TabSize | undefined
-): string {
-	const tab = getTabRegex(tabSize);
-	return line.replace(tab, "");
+export function getBlocksOf(velvetCode: string): TempBlock {
+	const lines = getLinesOf(velvetCode),
+		mainLine = lines.shift() ?? "",
+		currentIndent = getIndentOf(mainLine),
+		block: string[] = [];
+	lines.forEach((line) => {
+		if (currentIndent < getIndentOf(line)) {
+			block.push(line);
+		}
+	});
+	return {
+		line: mainLine,
+		block,
+	};
 }
 
 /**
- * Return a regex of tabsize
+ * Get the usable lines from string
  *
- * @param tabSize tabsize
- * @returns tabsize in regex
+ * @param velvetCode input velvet code
+ * @returns array of lines
  */
-function getTabRegex(tabSize: TabSize | undefined): RegExp {
-	if (!tabSize) tabSize = DefaultConfig.tabSize;
-
-	if (tabSize === 2) {
-		return /^(  )/;
-	} else if (tabSize === 4) {
-		return /^(    )/;
-	}
-	return /^(\t)/;
+export function getLinesOf(velvetCode: string): string[] {
+	return velvetCode.split(/[\n]/).filter((str) => str.trim().length > 0);
 }

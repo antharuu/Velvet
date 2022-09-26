@@ -1,36 +1,18 @@
-import { BlockTree } from "./Types/BlockTree";
-import { AST, VTag } from "./Types/AST";
-import BTConverter from "./BTConverter";
+import { AST, VNode } from "./Types/AST";
 
 /**
- * Parse the Velvet code into AST
+ * Parse the Velvet code into AST *(Abstract Syntax Tree)*
  */
 export default class Parser {
-	ast: AST;
-	lines: string[];
-	blockTree: BlockTree;
-
 	/**
-	 * @param velvetCode Velvet input code
+	 * Convert a string into an usable AST
+	 * @param velvetCode String to be converted in AST
 	 */
-	constructor(velvetCode: string) {
-		this.ast = [];
-		this.lines = [];
-		this.blockTree = BTConverter.convert(velvetCode);
-	}
+	static convert(velvetCode: string): AST {
+		const ast: AST = [];
 
-	/**
-	 * Get tag from regex
-	 *
-	 * @param regexResult
-	 * @param indent
-	 * @returns
-	 */
-	getTagFrom(regexResult: { [key: string]: string }, indent = 0): VTag {
-		return {
-			tag: regexResult.tag.trim(),
-			childs: [regexResult.rest],
-			indent,
-		};
+		// getBlocksOf(velvetCode).forEach((line: string) => {});
+
+		return ast;
 	}
 }
