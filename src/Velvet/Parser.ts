@@ -1,4 +1,3 @@
-import { getBlocksOf, getLinesOf } from "./Tools";
 import { AST, VNode } from "./Types/AST";
 
 /**
