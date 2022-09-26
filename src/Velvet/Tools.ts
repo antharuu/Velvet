@@ -1,3 +1,4 @@
+import { TempBlock } from "./Types/AST";
 import { DefaultConfig, TabSize } from "./Types/Config";
 
 /**
@@ -7,7 +8,10 @@ import { DefaultConfig, TabSize } from "./Types/Config";
  * @param tabSize tab size in config
  * @return indent
  */
-export function getIdent(line: string, tabSize: TabSize | undefined): number {
+export function getIndentOf(
+	line: string,
+	tabSize: TabSize | undefined = undefined
+): number {
 	if (!tabSize) tabSize = DefaultConfig.tabSize;
 
 	let tab = /^(\t)/,
@@ -26,6 +30,28 @@ export function getIdent(line: string, tabSize: TabSize | undefined): number {
 	}
 
 	return indent;
+}
+
+/**
+ * Get the usable blocks from string
+ *
+ * @param velvetCode input velvet code
+ * @returns array of blocks
+ */
+export function getBlocksOf(velvetCode: string): TempBlock {
+	const lines = getLinesOf(velvetCode),
+		mainLine = lines.shift() ?? "",
+		currentIndent = getIndentOf(mainLine),
+		block: string[] = [];
+	lines.forEach((line) => {
+		if (currentIndent < getIndentOf(line)) {
+			block.push(line);
+		}
+	});
+	return {
+		line: mainLine,
+		block,
+	};
 }
 
 /**
