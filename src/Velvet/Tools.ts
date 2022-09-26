@@ -27,3 +27,13 @@ export function getIdent(line: string, tabSize: TabSize | undefined): number {
 
 	return indent;
 }
+
+/**
+ * Get the usable lines from string
+ *
+ * @param velvetCode input velvet code
+ * @returns array of lines
+ */
+export function getLinesOf(velvetCode: string): string[] {
+	return velvetCode.split(/[\n]/).filter((str) => str.trim().length > 0);
+}
