@@ -6,7 +6,7 @@ export type VText = string;
 
 export type VTag = {
 	tag: string;
-	childs?: AST;
+	children: AST;
 	attributes?: VAttributes[];
 	indent: number;
 };
