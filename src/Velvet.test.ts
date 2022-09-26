@@ -1,10 +1,10 @@
 import Velvet from "./Velvet";
 
-test.todo("Parse simple tag", () => {
+test.todo.todo("Parse simple tag", () => {
 	expect(Velvet.parse("h1 Hello world")).toBe("<h1>Hello world</h1>");
 });
 
-test.todo("Remove empty lines", () => {
+test.todo.todo("Remove empty lines", () => {
 	expect(
 		Velvet.parse(`
 	h1 Hello world
