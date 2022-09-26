@@ -1,5 +1,5 @@
-type FullConfig = {
-	tabSize: "tab" | 2 | 4;
+export type FullConfig = {
+	tabSize: TabSize;
 	prettyHTML: false;
 };
 
@@ -9,3 +9,5 @@ export const DefaultConfig: FullConfig = {
 	tabSize: "tab",
 	prettyHTML: false,
 };
+
+export type TabSize = "tab" | 2 | 4;
