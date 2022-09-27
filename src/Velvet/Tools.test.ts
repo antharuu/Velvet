@@ -49,27 +49,35 @@ test("Get blocks from string", () => {
 		},
 	] as TempBlock[]);
 
-	// expect(
-	// 	getBlocksOf(`h1 Hello
-	// span
+	expect(
+		getBlocksOf(`h1 Hello
+	span
 
-	// 	a world`)
-	// ).toStrictEqual([
-	// 	{
-	// 		line: "h1 Hello",
-	// 		block: ["	span", "		a world"],
-	// 	},
-	// ] as TempBlock[]);
+		a world`)
+	).toStrictEqual([
+		{
+			line: "h1 Hello",
+			block: ["	span", "		a world"],
+		},
+	] as TempBlock[]);
 
-	// expect(
-	// 	getBlocksOf(`h1 Hello
-	// span
+	expect(
+		getBlocksOf(`h1 Hello
+	span
 
-	// 	a world`)
-	// ).toStrictEqual([
-	// 	{
-	// 		line: "h1 Hello",
-	// 		block: ["	span", "		a world"],
-	// 	},
-	// ] as TempBlock[]);
+		a world
+h2 Block
+	span 2
+	a
+		small coucou`)
+	).toStrictEqual([
+		{
+			line: "h1 Hello",
+			block: ["	span", "		a world"],
+		},
+		{
+			line: "h2 Block",
+			block: ["	span 2", "	a", "		small coucou"],
+		},
+	] as TempBlock[]);
 });

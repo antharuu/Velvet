@@ -40,25 +40,35 @@ export function getIndentOf(
  */
 export function getBlocksOf(velvetCode: string): TempBlock[] {
 	const lines = getLinesOf(velvetCode),
-		mainLine = lines.shift() ?? "",
-		currentIndent = getIndentOf(mainLine),
-		current_block: string[] = [],
 		blocks: TempBlock[] = [];
+	let mainLine = "",
+		currentIndent = getIndentOf(mainLine),
+		current_block: string[] = [];
 
 	function currentBlockEnd(): void {
-		blocks.push({
-			line: mainLine,
-			block: current_block,
-		});
+		if (mainLine.trim().length > 0) {
+			blocks.push({
+				line: mainLine,
+				block: current_block,
+			});
+		}
+		mainLine = "";
 	}
 
-	lines.forEach((line) => {
+	while (lines.length > 0) {
+		if (mainLine.length == 0) {
+			mainLine = lines.shift() ?? "";
+			currentIndent = getIndentOf(mainLine);
+			current_block = [];
+		}
+		const line = lines[0] ?? "";
+
 		if (currentIndent < getIndentOf(line)) {
-			current_block.push(line);
+			current_block.push(lines.shift() ?? "");
 		} else {
 			currentBlockEnd();
 		}
-	});
+	}
 	currentBlockEnd();
 
 	return blocks;
