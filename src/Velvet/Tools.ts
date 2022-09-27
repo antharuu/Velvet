@@ -1,5 +1,6 @@
 import { TempBlock } from "./Types/AST";
 import { DefaultConfig, TabSize } from "./Types/Config";
+import VelvetConfig from "./VelvetConfig";
 
 /**
  * Get indent from line
@@ -38,9 +39,16 @@ export function getIndentOf(
  * @param velvetCode input velvet code
  * @returns array of blocks
  */
-export function getBlocksOf(velvetCode: string): TempBlock[] {
-	const lines = getLinesOf(velvetCode),
-		blocks: TempBlock[] = [];
+export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
+	let lines: string[] = [];
+
+	if (Array.isArray(velvetCode)) {
+		lines = velvetCode;
+	} else {
+		lines = getLinesOf(velvetCode);
+	}
+
+	const blocks: TempBlock[] = [];
 	let mainLine = "",
 		currentIndent = getIndentOf(mainLine),
 		current_block: string[] = [];
@@ -49,7 +57,7 @@ export function getBlocksOf(velvetCode: string): TempBlock[] {
 		if (mainLine.trim().length > 0) {
 			blocks.push({
 				line: mainLine,
-				block: current_block,
+				block: getBlocksOf(removeIndentOf(current_block)),
 			});
 		}
 		mainLine = "";
@@ -58,7 +66,6 @@ export function getBlocksOf(velvetCode: string): TempBlock[] {
 	while (lines.length > 0) {
 		if (mainLine.length == 0) {
 			mainLine = lines.shift() ?? "";
-			currentIndent = getIndentOf(mainLine);
 			current_block = [];
 		}
 		const line = lines[0] ?? "";
@@ -82,4 +89,30 @@ export function getBlocksOf(velvetCode: string): TempBlock[] {
  */
 export function getLinesOf(velvetCode: string): string[] {
 	return velvetCode.split(/[\n]/).filter((str) => str.trim().length > 0);
+}
+
+/**
+ * Remove an indentation from lines
+ *
+ * @param lines lines to remove indent
+ */
+function removeIndentOf(lines: string[]): string[] {
+	return lines.map((line) => {
+		return line.replace(getTabRegex(), "");
+	});
+}
+
+/**
+ * Get the tab size and return regex
+ *
+ * @returns Tab regex
+ */
+function getTabRegex(forceTabSize: TabSize | undefined = undefined): RegExp {
+	const tabSize = forceTabSize ?? VelvetConfig.get().tabSize;
+	if (tabSize == 2) {
+		return /^(  )/;
+	} else if (tabSize == 4) {
+		return /^(    )/;
+	}
+	return /^(\t)/;
 }
