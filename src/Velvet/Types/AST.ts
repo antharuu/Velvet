@@ -18,5 +18,5 @@ export type VAttributes = {
 
 export type TempBlock = {
 	line: string;
-	block: string[];
+	block: TempBlock[];
 };
