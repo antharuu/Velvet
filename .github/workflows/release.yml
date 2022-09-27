@@ -1,34 +1,31 @@
 name: Release & Publish to NPM
 
 on:
-  push:
-    branches:
-      - dev
-  pull_request:
-    branches:
-      - master
-      - dev
+	pull_request:
+		branches:
+			- master
+			- dev
 
 jobs:
-  release:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-      - name: Install the dependancies
-        run: npm ci
-      - name: Initalize Git user
-        run: |
-          git config --global user.email "antho.eclips@gmail.com"
-          git config --global user.name "antharuu"
-      - name: Initialize NPM config
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Run release
-        run: npm run prod --ci
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: End message
-        run: echo 'All done !'
+	release:
+		runs-on: ubuntu-20.04
+		steps:
+			- name: Checkout source code
+				uses: actions/checkout@v2
+			- name: Install the dependancies
+				run: npm ci
+			- name: Initalize Git user
+				run: |
+					git config --global user.email "antho.eclips@gmail.com"
+					git config --global user.name "antharuu"
+			- name: Initialize NPM config
+				run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+				env:
+					NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+			- name: Run release
+				run: npm run prod --ci
+				env:
+					GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+					NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+			- name: End message
+				run: echo 'All done !'
