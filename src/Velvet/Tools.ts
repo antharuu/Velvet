@@ -38,20 +38,30 @@ export function getIndentOf(
  * @param velvetCode input velvet code
  * @returns array of blocks
  */
-export function getBlocksOf(velvetCode: string): TempBlock {
+export function getBlocksOf(velvetCode: string): TempBlock[] {
 	const lines = getLinesOf(velvetCode),
 		mainLine = lines.shift() ?? "",
 		currentIndent = getIndentOf(mainLine),
-		block: string[] = [];
+		current_block: string[] = [],
+		blocks: TempBlock[] = [];
+
+	function currentBlockEnd(): void {
+		blocks.push({
+			line: mainLine,
+			block: current_block,
+		});
+	}
+
 	lines.forEach((line) => {
 		if (currentIndent < getIndentOf(line)) {
-			block.push(line);
+			current_block.push(line);
+		} else {
+			currentBlockEnd();
 		}
 	});
-	return {
-		line: mainLine,
-		block,
-	};
+	currentBlockEnd();
+
+	return blocks;
 }
 
 /**

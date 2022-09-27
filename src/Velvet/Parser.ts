@@ -1,4 +1,5 @@
-import { AST, VNode } from "./Types/AST";
+import { getBlocksOf } from "./Tools";
+import { AST, TempBlock } from "./Types/AST";
 
 /**
  * Parse the Velvet code into AST *(Abstract Syntax Tree)*
@@ -11,8 +12,12 @@ export default class Parser {
 	static convert(velvetCode: string): AST {
 		const ast: AST = [];
 
-		// getBlocksOf(velvetCode).forEach((line: string) => {});
+		Parser.blockToAST(getBlocksOf(velvetCode));
 
 		return ast;
+	}
+
+	static blockToAST(block: TempBlock): AST {
+		return [];
 	}
 }
