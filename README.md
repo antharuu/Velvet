@@ -36,7 +36,9 @@ $ pnpm add velvet-lang --save-dev
 ## How To Use
 
 ```js
+import Velvet from "velvet-lang";
 
+const html = Velvet.parse("h1 Hello world");
 ```
 
 ## Syntaxe
