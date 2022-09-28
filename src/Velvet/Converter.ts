@@ -1,8 +1,7 @@
-import { AST, VNode, VTag } from "./Types/AST";
+import { AST, VNode, VTag } from "./Types/AST.js";
 
 export default class Converter {
 	static getHTML(ast: AST): string {
-		console.log(ast);
 		let html = "";
 
 		ast.forEach((node: VNode) => {

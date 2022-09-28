@@ -1,0 +1,1 @@
+{"version":3,"file":"VelvetConfig.d.ts","sourceRoot":"","sources":["../../src/Velvet/VelvetConfig.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAiB,UAAU,EAAE,MAAM,mBAAmB,CAAC;AAEtE,MAAM,CAAC,OAAO,OAAO,YAAY;IAChC,OAAO,CAAC,MAAM,CAAC,aAAa,CAAS;IAErC,OAAO,CAAC,MAAM,CAAC,MAAM,CAAa;WAEpB,IAAI,CAAC,MAAM,GAAE,MAAW;WAQxB,GAAG,IAAI,UAAU;CAI/B"}
