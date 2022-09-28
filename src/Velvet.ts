@@ -12,7 +12,6 @@ export default class Velvet {
 	 * @returns Html outpout
 	 */
 	static parse(velvetCode: string): string {
-		const P = new Parser(velvetCode);
-		return Converter.getHTML(P.getAST());
+		return Converter.getHTML(Parser.convert(velvetCode));
 	}
 }

@@ -12,11 +12,7 @@ export default class Parser {
 	 * @param velvetCode String to be converted in AST
 	 */
 	static convert(velvetCode: string): AST {
-		const ast: AST = [];
-
-		Parser.blockToAST(getBlocksOf(velvetCode));
-
-		return ast;
+		return Parser.blockToAST(getBlocksOf(velvetCode));
 	}
 
 	static blockToAST(blocks: TempBlock[], indent: number = 0): AST {
@@ -28,7 +24,7 @@ export default class Parser {
 				ast.push({
 					tag: res.tag,
 					children:
-						res.line_content.trim().length > 0
+						res.line_content?.trim().length > 0
 							? [res.line_content, ...children]
 							: children,
 					indent,

@@ -2,6 +2,7 @@ import { AST, VNode, VTag } from "./Types/AST";
 
 export default class Converter {
 	static getHTML(ast: AST): string {
+		console.log(ast);
 		let html = "";
 
 		ast.forEach((node: VNode) => {
@@ -22,8 +23,8 @@ export default class Converter {
 
 	static getTagFrom(node: VTag): string {
 		let content = "";
-		if (node.childs) {
-			content = Converter.getHTML(node.childs);
+		if (node.children) {
+			content = Converter.getHTML(node.children);
 		}
 		return `<${node.tag}>${content}</${node.tag}>`;
 	}

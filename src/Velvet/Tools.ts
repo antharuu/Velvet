@@ -56,7 +56,7 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 	function currentBlockEnd(): void {
 		if (mainLine.trim().length > 0) {
 			blocks.push({
-				line: mainLine,
+				line: mainLine.trimStart(),
 				block: getBlocksOf(removeIndentOf(current_block)),
 			});
 		}
