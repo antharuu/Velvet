@@ -129,7 +129,6 @@ export function getRegexOf(
 	string: string
 ): { [key: string]: string } {
 	let m,
-		limit = 0,
 		groups: { [key: string]: string } | null = null;
 	while ((m = regex.exec(string)) !== null && !groups) {
 		// This is necessary to avoid infinite loops with zero-width matches
@@ -137,7 +136,6 @@ export function getRegexOf(
 			regex.lastIndex++;
 		}
 		groups = m.groups ?? {};
-		limit++;
 	}
 	return groups ?? {};
 }
