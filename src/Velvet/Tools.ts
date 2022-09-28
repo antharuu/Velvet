@@ -1,6 +1,6 @@
-import { TempBlock } from "./Types/AST";
-import { DefaultConfig, TabSize } from "./Types/Config";
-import VelvetConfig from "./VelvetConfig";
+import { TempBlock } from "./Types/AST.js";
+import { DefaultConfig, TabSize } from "./Types/Config.js";
+import VelvetConfig from "./VelvetConfig.js";
 
 /**
  * Get indent from line

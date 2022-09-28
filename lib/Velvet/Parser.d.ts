@@ -1,4 +1,4 @@
-import { AST, TempBlock } from "./Types/AST";
+import { AST, TempBlock } from "./Types/AST.js";
 /**
  * Parse the Velvet code into AST *(Abstract Syntax Tree)*
  */

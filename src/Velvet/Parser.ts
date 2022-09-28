@@ -1,5 +1,5 @@
-import { getBlocksOf, getRegexOf } from "./Tools";
-import { AST, TempBlock } from "./Types/AST";
+import { getBlocksOf, getRegexOf } from "./Tools.js";
+import { AST, TempBlock } from "./Types/AST.js";
 
 /**
  * Parse the Velvet code into AST *(Abstract Syntax Tree)*

@@ -1,5 +1,5 @@
-import Converter from "./Velvet/Converter";
-import Parser from "./Velvet/Parser";
+import Converter from "./Velvet/Converter.js";
+import Parser from "./Velvet/Parser.js";
 
 /**
  * Velvet preprocessor

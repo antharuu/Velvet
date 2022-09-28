@@ -1,4 +1,4 @@
-import { Config, DefaultConfig, FullConfig } from "./Types/Config";
+import { Config, DefaultConfig, FullConfig } from "./Types/Config.js";
 
 export default class VelvetConfig {
 	private static __initialized = false;

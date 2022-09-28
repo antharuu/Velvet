@@ -1,5 +1,5 @@
-import { TempBlock } from "./Types/AST";
-import { TabSize } from "./Types/Config";
+import { TempBlock } from "./Types/AST.js";
+import { TabSize } from "./Types/Config.js";
 /**
  * Get indent from line
  *

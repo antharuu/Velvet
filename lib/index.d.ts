@@ -1,5 +1,3 @@
-import Velvet from "./Velvet";
-import VelvetConfig from "./Velvet/VelvetConfig";
+import Velvet from "./Velvet.js";
 export default Velvet;
-export declare const Config: typeof VelvetConfig;
 //# sourceMappingURL=index.d.ts.map
