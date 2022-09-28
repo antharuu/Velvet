@@ -1,3 +1,3 @@
 import Velvet from "./Velvet";
 
-export { Velvet };
+export default Velvet;
