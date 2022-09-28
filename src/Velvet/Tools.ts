@@ -116,3 +116,28 @@ function getTabRegex(forceTabSize: TabSize | undefined = undefined): RegExp {
 	}
 	return /^(\t)/;
 }
+
+/**
+ * Return groups from given regex and string
+ *
+ * @param regex used regex
+ * @param string string to use regex
+ * @returns finded groups
+ */
+export function getRegexOf(
+	regex: RegExp,
+	string: string
+): { [key: string]: string } {
+	let m,
+		limit = 0,
+		groups: { [key: string]: string } | null = null;
+	while ((m = regex.exec(string)) !== null && !groups) {
+		// This is necessary to avoid infinite loops with zero-width matches
+		if (m.index === regex.lastIndex) {
+			regex.lastIndex++;
+		}
+		groups = m.groups ?? {};
+		limit++;
+	}
+	return groups ?? {};
+}
