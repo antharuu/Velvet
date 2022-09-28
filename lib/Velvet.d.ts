@@ -10,3 +10,4 @@ export default class Velvet {
      */
     static parse(velvetCode: string): string;
 }
+//# sourceMappingURL=Velvet.d.ts.map

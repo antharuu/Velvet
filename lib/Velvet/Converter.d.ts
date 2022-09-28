@@ -4,3 +4,4 @@ export default class Converter {
     static getHtmlFromLine(node: VNode): string;
     static getTagFrom(node: VTag): string;
 }
+//# sourceMappingURL=Converter.d.ts.map

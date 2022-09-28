@@ -32,3 +32,4 @@ export declare function getLinesOf(velvetCode: string): string[];
 export declare function getRegexOf(regex: RegExp, string: string): {
     [key: string]: string;
 };
+//# sourceMappingURL=Tools.d.ts.map

@@ -3,14 +3,14 @@
 	"description": "Velvet is a HTML preprocessor, converting Velvet language (PUGjs like) to HTML.",
 	"version": "0.1.1",
 	"type": "module",
-	"main": "./lib.index.js",
-	"types": "./lib/index.d.ts",
+	"main": "./lib/index.js",
+	"types": "./lib",
 	"files": [
 		"lib/**/*"
 	],
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
+		"build": "tsc",
 		"preview": "vite preview",
 		"test": "vitest --globals --sequence.shuffle --sequence.shuffle",
 		"test:ui": "npx vitest --globals --ui --sequence.shuffle --sequence.shuffle",

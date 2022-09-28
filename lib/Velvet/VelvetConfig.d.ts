@@ -5,3 +5,4 @@ export default class VelvetConfig {
     static init(config?: Config): void;
     static get(): FullConfig;
 }
+//# sourceMappingURL=VelvetConfig.d.ts.map

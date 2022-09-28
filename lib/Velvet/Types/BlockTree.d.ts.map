@@ -1,0 +1,1 @@
+{"version":3,"file":"BlockTree.d.ts","sourceRoot":"","sources":["../../../src/Velvet/Types/BlockTree.ts"],"names":[],"mappings":"AAAA,oBAAY,SAAS,GAAG,MAAM,EAAE,CAAC;AAEjC,oBAAY,MAAM,GAAG;IACpB,IAAI,EAAE,MAAM,CAAC;IACb,KAAK,EAAE,SAAS,CAAC;CACjB,CAAC;AAEF,oBAAY,UAAU,GAAG;IACxB,IAAI,EAAE,MAAM,CAAC;IACb,KAAK,EAAE,MAAM,CAAC;CACd,CAAC"}

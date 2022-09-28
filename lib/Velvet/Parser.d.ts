@@ -11,3 +11,4 @@ export default class Parser {
     static convert(velvetCode: string): AST;
     static blockToAST(blocks: TempBlock[], indent?: number): AST;
 }
+//# sourceMappingURL=Parser.d.ts.map
