@@ -36,7 +36,9 @@ $ pnpm add velvet-lang --save-dev
 ## How To Use
 
 ```js
+import Velvet from "velvet-lang";
 
+const html = Velvet.parse("h1 Hello world");
 ```
 
 ## Syntaxe
@@ -44,6 +46,16 @@ $ pnpm add velvet-lang --save-dev
 > **Note**
 > A website with documentation on the syntax will be released once the project is more progressed.
 
+Simple examples
+
 ```pug
-SOON
+h1 Hello world
+
+// <h1>Hello world</h1>
+
+
+h1 Hello
+  span world
+
+// <h1>Hello <span>world</span></h1>
 ```
