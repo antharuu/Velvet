@@ -1,6 +1,13 @@
 {
 	"name": "velvet-lang",
 	"description": "Velvet is a HTML preprocessor, converting Velvet language (PUGjs like) to HTML.",
+	"keywords": [
+		"velvet",
+		"preprocessor",
+		"HTML",
+		"front-end",
+		"PUGjs"
+	],
 	"version": "0.1.5",
 	"main": "./lib/index.js",
 	"type": "module",
