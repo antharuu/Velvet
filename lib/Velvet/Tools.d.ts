@@ -23,6 +23,18 @@ export declare function getBlocksOf(velvetCode: string | string[]): TempBlock[];
  */
 export declare function getLinesOf(velvetCode: string): string[];
 /**
+ * Remove an indentation from lines
+ *
+ * @param lines lines to remove indent
+ */
+export declare function removeIndentOf<T extends string | string[]>(lines: T): T;
+/**
+ * Get the tab size and return regex
+ *
+ * @returns Tab regex
+ */
+export declare function getTabRegex(forceTabSize?: TabSize | undefined): RegExp;
+/**
  * Return groups from given regex and string
  *
  * @param regex used regex

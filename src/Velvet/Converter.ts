@@ -14,13 +14,13 @@ export default class Converter {
 	static getHtmlFromLine(node: VNode): string {
 		if (typeof node === "string") {
 			return node;
-		} else if (node.hasOwnProperty("tag")) {
-			return Converter.getTagFrom(node);
 		}
-		return "";
+		return Converter.getFromTag(node);
 	}
 
-	static getTagFrom(node: VTag): string {
+	static getFromTag(node: VTag): string {
+		/* c8 ignore next */
+		if (node.tag.trim().length === 0) return "";
 		let content = "";
 		if (node.children) {
 			content = Converter.getHTML(node.children);

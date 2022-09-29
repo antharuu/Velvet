@@ -1,4 +1,11 @@
-import { getBlocksOf, getIndentOf, getLinesOf } from "./Tools";
+import {
+	getBlocksOf,
+	getIndentOf,
+	getLinesOf,
+	getRegexOf,
+	getTabRegex,
+	removeIndentOf,
+} from "./Tools";
 import { TempBlock } from "./Types/AST";
 
 describe("Indentation", () => {
@@ -20,7 +27,7 @@ describe("Indentation", () => {
 });
 
 test("Get lines from string", () => {
-	expect(getLinesOf(`h1 Hello`)).toStrictEqual(["h1 Hello"]);
+	expect(getLinesOf("h1 Hello")).toStrictEqual(["h1 Hello"]);
 
 	expect(
 		getLinesOf(`h1 Hello
@@ -42,7 +49,7 @@ test("Get lines from string", () => {
 });
 
 test("Get blocks from string", () => {
-	expect(getBlocksOf(`h1 Hello world`)).toStrictEqual([
+	expect(getBlocksOf("h1 Hello world")).toStrictEqual([
 		{
 			line: "h1 Hello world",
 			block: [],
@@ -87,4 +94,44 @@ h2 Block
 			],
 		},
 	] as TempBlock[]);
+});
+
+test("Get empty block", () => {
+	expect(getBlocksOf("")).toStrictEqual([]);
+});
+
+test("Remove indent of string", () => {
+	expect(removeIndentOf<string>("h1 Hello world")).toBe("h1 Hello world");
+	expect(removeIndentOf<string>("	h1 Hello world")).toBe("h1 Hello world");
+	expect(removeIndentOf<string>("		h1 Hello world")).toBe("	h1 Hello world");
+	expect(removeIndentOf<string>("		h1 Hello world	")).toBe("	h1 Hello world	");
+});
+
+test("Remove indent of string array", () => {
+	expect(removeIndentOf(["	h1 Hello world"])).toStrictEqual([
+		"h1 Hello world",
+	]);
+	expect(
+		removeIndentOf(["	h1 Hello world", "	h2", "		a how are you ?"])
+	).toStrictEqual(["h1 Hello world", "h2", "	a how are you ?"]);
+});
+
+test("Get good regex for tab", () => {
+	expect(getTabRegex()).toStrictEqual(/^(\t)/);
+	expect(getTabRegex(2)).toStrictEqual(/^( {2})/);
+	expect(getTabRegex(4)).toStrictEqual(/^( {4})/);
+});
+
+test("Get regex groups of simple line", () => {
+	expect(
+		getRegexOf(/^(?<tag>[\w]+) ?(?<line_content>.*)/, "h1 Hello world !")
+	).toHaveProperty("tag");
+	expect(
+		getRegexOf(/^(?<tag>[\w]+) ?(?<line_content>.*)/, "h1 Hello world !")
+	).toHaveProperty("line_content");
+});
+
+test("Get empty object for invalid line or regex", () => {
+	expect(getRegexOf(/^([\w]+) ?(.*)/, "h1 Hello world !")).toStrictEqual({});
+	expect(getRegexOf(/^([\w]+) ?(.*)/, "")).toStrictEqual({});
 });

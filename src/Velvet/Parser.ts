@@ -5,7 +5,7 @@ import { AST, TempBlock } from "./Types/AST.js";
  * Parse the Velvet code into AST *(Abstract Syntax Tree)*
  */
 export default class Parser {
-	static lineRegex: RegExp = /^(?<tag>[\w]+)( ?)(?<line_content>.*)?/;
+	static lineRegex = /^(?<tag>[\w]+)( ?)(?<line_content>.*)?/;
 
 	/**
 	 * Convert a string into an usable AST
@@ -15,9 +15,10 @@ export default class Parser {
 		return Parser.blockToAST(getBlocksOf(velvetCode));
 	}
 
-	static blockToAST(blocks: TempBlock[], indent: number = 0): AST {
+	static blockToAST(blocks: TempBlock[], indent = 0): AST {
 		const ast: AST = [];
 		blocks.forEach((block) => {
+			/* c8 ignore next */
 			const res = getRegexOf(Parser.lineRegex, block.line) ?? "";
 			if (res.tag) {
 				const children = this.blockToAST(block.block, indent + 1);
