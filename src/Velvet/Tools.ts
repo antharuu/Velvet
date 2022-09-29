@@ -18,9 +18,9 @@ export function getIndentOf(
 	let tab = /^(\t)/,
 		indent = 0;
 	if (tabSize === 2) {
-		tab = /^(  )/;
+		tab = /^( {2})/;
 	} else if (tabSize === 4) {
-		tab = /^(    )/;
+		tab = /^( {4})/;
 	}
 
 	if (line.length !== line.trim().length) {
@@ -48,10 +48,10 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 		lines = getLinesOf(velvetCode);
 	}
 
-	const blocks: TempBlock[] = [];
 	let mainLine = "",
-		currentIndent = getIndentOf(mainLine),
 		current_block: string[] = [];
+	const blocks: TempBlock[] = [],
+		currentIndent = getIndentOf(mainLine);
 
 	function currentBlockEnd(): void {
 		if (mainLine.trim().length > 0) {
@@ -118,9 +118,9 @@ export function getTabRegex(
 ): RegExp {
 	const tabSize = forceTabSize ?? VelvetConfig.get().tabSize;
 	if (tabSize == 2) {
-		return /^(  )/;
+		return /^( {2})/;
 	} else if (tabSize == 4) {
-		return /^(    )/;
+		return /^( {4})/;
 	}
 	return /^(\t)/;
 }

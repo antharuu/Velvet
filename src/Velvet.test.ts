@@ -29,7 +29,7 @@ test("Simple sub tab", () => {
 		Velvet.parse(`h1
 	span Hello world
 `)
-	).toBe(`<h1><span>Hello world</span></h1>`);
+	).toBe("<h1><span>Hello world</span></h1>");
 });
 
 test("Remove useless spaces/tabs at start", () => {
@@ -38,5 +38,5 @@ test("Remove useless spaces/tabs at start", () => {
 		
 				  span Hello world
 `)
-	).toBe(`<h1><span>Hello world</span></h1>`);
+	).toBe("<h1><span>Hello world</span></h1>");
 });

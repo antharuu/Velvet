@@ -31,7 +31,7 @@ test("Get HTML from nested AST", () => {
 		])
 			.split("\n")
 			.join("") // replaceAll polyfill
-	).toBe(`<h1>Hello <a>world</a> !</h1>`);
+	).toBe("<h1>Hello <a>world</a> !</h1>");
 });
 
 test("Get html from line", () => {

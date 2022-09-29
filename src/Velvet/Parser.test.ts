@@ -3,7 +3,7 @@ import { getBlocksOf } from "./Tools";
 import { AST } from "./Types/AST";
 
 test("Should convert simple line to ast", () => {
-	expect(Parser.blockToAST(getBlocksOf(`h1 Hello world`))).toStrictEqual([
+	expect(Parser.blockToAST(getBlocksOf("h1 Hello world"))).toStrictEqual([
 		{
 			tag: "h1",
 			children: ["Hello world"],

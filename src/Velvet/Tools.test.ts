@@ -27,7 +27,7 @@ describe("Indentation", () => {
 });
 
 test("Get lines from string", () => {
-	expect(getLinesOf(`h1 Hello`)).toStrictEqual(["h1 Hello"]);
+	expect(getLinesOf("h1 Hello")).toStrictEqual(["h1 Hello"]);
 
 	expect(
 		getLinesOf(`h1 Hello
@@ -49,7 +49,7 @@ test("Get lines from string", () => {
 });
 
 test("Get blocks from string", () => {
-	expect(getBlocksOf(`h1 Hello world`)).toStrictEqual([
+	expect(getBlocksOf("h1 Hello world")).toStrictEqual([
 		{
 			line: "h1 Hello world",
 			block: [],
@@ -118,8 +118,8 @@ test("Remove indent of string array", () => {
 
 test("Get good regex for tab", () => {
 	expect(getTabRegex()).toStrictEqual(/^(\t)/);
-	expect(getTabRegex(2)).toStrictEqual(/^(  )/);
-	expect(getTabRegex(4)).toStrictEqual(/^(    )/);
+	expect(getTabRegex(2)).toStrictEqual(/^( {2})/);
+	expect(getTabRegex(4)).toStrictEqual(/^( {4})/);
 });
 
 test("Get regex groups of simple line", () => {
