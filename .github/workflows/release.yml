@@ -13,8 +13,8 @@ jobs:
             - name: Checkout source code
               uses: actions/checkout@v2
             - name: Install the dependancies
-              run: npm ci
+              run: pnpm install
             - name: Run tests
-              run: npm run test
+              run: pnpm run test
             - name: End message
               run: echo 'All done !'

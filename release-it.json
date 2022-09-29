@@ -6,6 +6,7 @@
 	"hooks": {
 		"before:init": [
 			"git pull",
+			"pnpm update",
 			"pnpx eslint src --fix",
 			"pnpm test",
 			"pnpm build"
