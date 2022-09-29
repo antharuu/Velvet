@@ -65,12 +65,14 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 
 	while (lines.length > 0) {
 		if (mainLine.length == 0) {
+			/* c8 ignore next */
 			mainLine = lines.shift() ?? "";
 			current_block = [];
 		}
 		const line = lines[0] ?? "";
 
 		if (currentIndent < getIndentOf(line)) {
+			/* c8 ignore next */
 			current_block.push(lines.shift() ?? "");
 		} else {
 			currentBlockEnd();
@@ -96,10 +98,14 @@ export function getLinesOf(velvetCode: string): string[] {
  *
  * @param lines lines to remove indent
  */
-function removeIndentOf(lines: string[]): string[] {
-	return lines.map((line) => {
-		return line.replace(getTabRegex(), "");
-	});
+export function removeIndentOf<T extends string | string[]>(lines: T): T {
+	if (typeof lines === "string") {
+		return lines.replace(getTabRegex(), "") as T;
+	} else {
+		return lines.map((line) => {
+			return line.replace(getTabRegex(), "");
+		}) as T;
+	}
 }
 
 /**
@@ -107,7 +113,9 @@ function removeIndentOf(lines: string[]): string[] {
  *
  * @returns Tab regex
  */
-function getTabRegex(forceTabSize: TabSize | undefined = undefined): RegExp {
+export function getTabRegex(
+	forceTabSize: TabSize | undefined = undefined
+): RegExp {
 	const tabSize = forceTabSize ?? VelvetConfig.get().tabSize;
 	if (tabSize == 2) {
 		return /^(  )/;

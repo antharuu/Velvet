@@ -13,8 +13,8 @@
 		"build": "tsc",
 		"preview": "vite preview",
 		"test": "vitest --globals --sequence.shuffle --sequence.shuffle",
-		"test:ui": "npx vitest --globals --ui --sequence.shuffle --sequence.shuffle",
-		"test:cover": "npx vitest --globals --coverage --sequence.shuffle --sequence.shuffle",
+		"test:ui": "npx vitest --globals --ui --sequence.shuffle",
+		"test:cover": "npx vitest --globals --coverage --sequence.shuffle",
 		"prod": "release-it",
 		"clean": "rm -rf node_modules"
 	},

@@ -18,6 +18,7 @@ export default class Parser {
 	static blockToAST(blocks: TempBlock[], indent: number = 0): AST {
 		const ast: AST = [];
 		blocks.forEach((block) => {
+			/* c8 ignore next */
 			const res = getRegexOf(Parser.lineRegex, block.line) ?? "";
 			if (res.tag) {
 				const children = this.blockToAST(block.block, indent + 1);
