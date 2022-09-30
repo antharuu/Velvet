@@ -7,7 +7,7 @@
 		"before:init": [
 			"git pull",
 			"pnpm update",
-			"pnpm fix",
+			"pnpm lint",
 			"pnpm test",
 			"pnpm build"
 		],
