@@ -11,7 +11,7 @@
 			"pnpm test:once",
 			"pnpm build",
 			"git add . --update",
-			"git commit -m \"build: v${version}\""
+			"git commit -m \"chore: build\""
 		],
 		"after:bump": "npx auto-changelog -p"
 	},
