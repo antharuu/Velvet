@@ -7,7 +7,7 @@
 		"before:init": [
 			"git pull",
 			"pnpm update",
-			"pnpx eslint src --fix",
+			"pnpm fix",
 			"pnpm test",
 			"pnpm build"
 		],
