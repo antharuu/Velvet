@@ -1,4 +1,4 @@
-import { TempBlock } from "./Types/AST.js";
+import { BlockAttr, TempBlock } from "./Types/AST.js";
 import { TabSize } from "./Types/Config.js";
 /**
  * Get indent from line
@@ -44,4 +44,5 @@ export declare function getTabRegex(forceTabSize?: TabSize | undefined): RegExp;
 export declare function getRegexOf(regex: RegExp, string: string): {
     [key: string]: string;
 };
+export declare function getBlockAttrOf(block: TempBlock[]): BlockAttr;
 //# sourceMappingURL=Tools.d.ts.map

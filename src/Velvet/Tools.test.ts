@@ -137,7 +137,7 @@ test("Get empty object for invalid line or regex", () => {
 	expect(getRegexOf(/^([\w]+) ?(.*)/, "")).toStrictEqual({});
 });
 
-test("Should return attributes", () => {
+test.todo("Should return attributes", () => {
 	expect(getBlockAttrOf(getBlocksOf("h1(disabled) Hello world"))).toStrictEqual({
 		current_block: [
 			{

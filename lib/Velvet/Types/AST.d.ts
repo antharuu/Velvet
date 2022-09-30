@@ -4,12 +4,15 @@ export declare type VText = string;
 export declare type VTag = {
     tag: string;
     children: AST;
-    attributes?: VAttributes[];
+    attributes?: VAttributes;
     indent: number;
 };
 export declare type VAttributes = {
-    name: string;
-    value?: string | string[] | null;
+    [key: string]: string | string[] | number | number[] | null;
+};
+export declare type BlockAttr = {
+    current_block: TempBlock[];
+    attributes: VAttributes;
 };
 export declare type TempBlock = {
     line: string;
