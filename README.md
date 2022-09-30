@@ -10,9 +10,15 @@
  inspired by <a href="https://pugjs.org/api/getting-started.html" target="_blank">pug</a>.</h4>
 
 <p align="center">
+  <a href="https://github.com/antharuu/Velvet">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/antharuu/Velvet?style=for-the-badge">
+  </a>
   <a href="https://badge.fury.io/js/velvet-lang">
-    <img src="https://badge.fury.io/js/velvet-lang.svg"
-         alt="npmjs">
+    <img alt="npm" src="https://img.shields.io/npm/v/velvet-lang?style=for-the-badge">
+  </a>
+  <a href="https://www.npmjs.com/package/velvet-lang">
+  <img alt="npm bundle size (version)" src="https://img.shields.io/bundlephobia/min/velvet-lang/*?style=for-the-badge">
+  </a>
   </a>
 </p>
 
