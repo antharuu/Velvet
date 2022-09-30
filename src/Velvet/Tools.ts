@@ -1,4 +1,4 @@
-import { TempBlock } from "./Types/AST.js";
+import { BlockAttr, TempBlock } from "./Types/AST.js";
 import { DefaultConfig, TabSize } from "./Types/Config.js";
 import VelvetConfig from "./VelvetConfig.js";
 
@@ -56,7 +56,7 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 	function currentBlockEnd(): void {
 		if (mainLine.trim().length > 0) {
 			blocks.push({
-				line: mainLine.trimStart(),
+				line: mainLine.replace(/^(\s*)/, ""),
 				block: getBlocksOf(removeIndentOf(current_block)),
 			});
 		}
@@ -146,4 +146,8 @@ export function getRegexOf(
 		groups = m.groups ?? {};
 	}
 	return groups ?? {};
+}
+
+export function getBlockAttrOf(block: TempBlock[]): BlockAttr {
+	return {current_block: block, attributes: {}};
 }

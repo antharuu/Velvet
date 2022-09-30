@@ -1,4 +1,5 @@
 import {
+	getBlockAttrOf,
 	getBlocksOf,
 	getIndentOf,
 	getLinesOf,
@@ -6,7 +7,7 @@ import {
 	getTabRegex,
 	removeIndentOf,
 } from "./Tools";
-import { TempBlock } from "./Types/AST";
+import { BlockAttr, TempBlock } from "./Types/AST";
 
 describe("Indentation", () => {
 	test("With tabsize: tab", () => {
@@ -134,4 +135,18 @@ test("Get regex groups of simple line", () => {
 test("Get empty object for invalid line or regex", () => {
 	expect(getRegexOf(/^([\w]+) ?(.*)/, "h1 Hello world !")).toStrictEqual({});
 	expect(getRegexOf(/^([\w]+) ?(.*)/, "")).toStrictEqual({});
+});
+
+test("Should return attributes", () => {
+	expect(getBlockAttrOf(getBlocksOf("h1(disabled) Hello world"))).toStrictEqual({
+		current_block: [
+			{
+				line: "Hello world",
+				block: []
+			}
+		],
+		attributes: {
+			disabled: null
+		}
+	} as BlockAttr);
 });
