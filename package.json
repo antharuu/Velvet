@@ -28,7 +28,7 @@
 		"clean": "rm -rf node_modules"
 	},
 	"devDependencies": {
-		"@types/jest": "^29.1.0",
+		"@types/jest": "^29.1.1",
 		"@typescript-eslint/eslint-plugin": "^5.38.1",
 		"@typescript-eslint/parser": "^5.38.1",
 		"@vitest/coverage-c8": "^0.23.4",
