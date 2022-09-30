@@ -22,6 +22,7 @@
 		"test": "npx vitest --globals --sequence.shuffle --sequence.shuffle",
 		"test:ui": "npm run test -- --ui",
 		"test:cover": "npm run test -- --coverage",
+		"test:once": "npx vitest run --globals --sequence.shuffle --sequence.shuffle",
 		"prod": "release-it --verbose",
 		"lint": "eslint src --fix",
 		"clean": "rm -rf node_modules"
