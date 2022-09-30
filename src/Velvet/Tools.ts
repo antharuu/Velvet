@@ -56,7 +56,7 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 	function currentBlockEnd(): void {
 		if (mainLine.trim().length > 0) {
 			blocks.push({
-				line: mainLine.replace(/^ */, ""),
+				line: mainLine.replace(/^(\s*)/, ""),
 				block: getBlocksOf(removeIndentOf(current_block)),
 			});
 		}
