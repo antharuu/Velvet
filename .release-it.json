@@ -10,7 +10,8 @@
 			"pnpm lint",
 			"pnpm test:once",
 			"pnpm build",
-			"git add ."
+			"git add . --update",
+			"git commit -m \"build: v${version}\""
 		],
 		"after:bump": "npx auto-changelog -p"
 	},
