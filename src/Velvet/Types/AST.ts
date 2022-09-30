@@ -7,11 +7,15 @@ export type VText = string;
 export type VTag = {
 	tag: string;
 	children: AST;
-	attributes?: {
-		[key: string]: string | string[] | number | number[] | null
-	};
+	attributes?: VAttributes;
 	indent: number;
 };
+
+export type VAttributes = {
+	[key: string]: string | string[] | number | number[] | null
+}
+
+export type BlockAttr = {current_block: TempBlock[], attributes: VAttributes};
 
 export type TempBlock = {
 	line: string;

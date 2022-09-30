@@ -1,4 +1,4 @@
-import { TempBlock } from "./Types/AST.js";
+import { BlockAttr, TempBlock } from "./Types/AST.js";
 import { DefaultConfig, TabSize } from "./Types/Config.js";
 import VelvetConfig from "./VelvetConfig.js";
 
@@ -146,4 +146,8 @@ export function getRegexOf(
 		groups = m.groups ?? {};
 	}
 	return groups ?? {};
+}
+
+export function getBlockAttrOf(block: TempBlock[]): BlockAttr {
+	return {current_block: block, attributes: {}};
 }

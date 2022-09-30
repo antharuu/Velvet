@@ -43,4 +43,6 @@ test("Remove useless spaces/tabs at start", () => {
 
 test.todo("With a simple attribute", () => {
 	expect(Velvet.parse("a(href=#) Hello world")).toBe("<a href=\"#\">Hello world</a>");
+	expect(Velvet.parse("a(href=# disabled) Hello world")).toBe("<a href=\"#\" disabled>Hello world</a>");
+	expect(Velvet.parse("a(href=#) Hello (world)")).toBe("<a href=\"#\">Hello (world)</a>");
 });
