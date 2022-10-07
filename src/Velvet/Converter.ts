@@ -1,4 +1,4 @@
-import { AST, VNode, VTag } from "./Types/AST.js";
+import { AST, VAttributes, VNode, VTag } from "./Types/AST.js";
 
 export default class Converter {
 	static getHTML(ast: AST): string {
@@ -25,6 +25,29 @@ export default class Converter {
 		if (node.children) {
 			content = Converter.getHTML(node.children);
 		}
-		return `<${node.tag}>${content}</${node.tag}>`;
+		return `<${node.tag}${getAttributes(node)}>${content}</${node.tag}>`;
 	}
+}
+
+/**
+ * Get the attributes string of a node
+ *
+ * @param node Node to get the attributes from
+ * @returns Attributes string
+ */
+export function getAttributes(node: VTag): string {
+	let attributesStr = "";
+	if (node?.attributes ?? false) {
+		Object.keys(node.attributes as VAttributes).forEach((name) => {
+			if (node?.attributes) {
+				const value = node?.attributes[name];
+				if (value !== null) {
+					attributesStr += ` ${name}="${value}"`;
+				} else {
+					attributesStr += ` ${name}`;
+				}
+			}
+		});
+	}
+	return attributesStr;
 }
