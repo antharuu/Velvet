@@ -1,6 +1,5 @@
 import {
 	getAttributesOf,
-	getBlockAttrOf,
 	getBlocksOf,
 	getIndentOf,
 	getLinesOf,
@@ -10,7 +9,7 @@ import {
 	removeIndentOf,
 	removeStringQuote,
 } from "./Tools";
-import { BlockAttr, TempBlock } from "./Types/AST";
+import { TempBlock } from "./Types/AST";
 
 describe("Indentation", () => {
 	test("With tabsize: tab", () => {
@@ -141,22 +140,6 @@ test("Get empty object for invalid line or regex", () => {
 });
 
 test("Should return attributes", () => {
-	expect(
-		getBlockAttrOf(getBlocksOf("h1(disabled) Hello world"))
-	).toStrictEqual({
-		current_block: [
-			{
-				line: "Hello world",
-				block: [],
-			},
-		],
-		attributes: {
-			disabled: null,
-		},
-	} as BlockAttr);
-});
-
-test.todo("Should return attributes", () => {
 	expect(getAttributesOf("(disabled) Hello world")).toStrictEqual({
 		line: "Hello world",
 		attributes: {
@@ -194,7 +177,7 @@ test("Should return the pats of line", () => {
 	});
 });
 
-test.only("Should remove quotes froms string", () => {
+test("Should remove quotes froms string", () => {
 	expect(removeStringQuote("Test string")).toBe("Test string");
 	expect(removeStringQuote("'Test string'")).toBe("Test string");
 	expect(removeStringQuote('"Test \'string"')).toBe("Test 'string");

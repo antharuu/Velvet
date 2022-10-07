@@ -1,4 +1,4 @@
-import { BlockAttr, TempBlock, VAttributes } from "./Types/AST.js";
+import { TempBlock, VAttributes } from "./Types/AST.js";
 import { DefaultConfig, TabSize } from "./Types/Config.js";
 import VelvetConfig from "./VelvetConfig.js";
 
@@ -41,7 +41,6 @@ export function getIndentOf(
  */
 export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 	let lines: string[] = [];
-	const attributes: VAttributes[] = [];
 
 	if (Array.isArray(velvetCode)) {
 		lines = velvetCode;
@@ -57,12 +56,6 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 	function currentBlockEnd(): void {
 		if (mainLine.trim().length > 0) {
 			const c_block = getBlocksOf(removeIndentOf(current_block));
-
-			// Get Html attributes from line
-			const attr = getAttributesOf(mainLine);
-			if (attr) {
-				attributes.push(attr);
-			}
 
 			blocks.push({
 				line: mainLine.replace(/^(\s*)/, ""),
@@ -157,10 +150,6 @@ export function getRegexOf(
 	return groups ?? {};
 }
 
-export function getBlockAttrOf(block: TempBlock[]): BlockAttr {
-	return { current_block: block, attributes: {} };
-}
-
 /**
  * Get attributes from line
  * @param lineStr line to get attributes
@@ -183,8 +172,6 @@ export function getAttributesOf(lineStr: string): {
 			if (m.index === attrRegex.lastIndex) {
 				attrRegex.lastIndex++;
 			}
-
-			console.log(m);
 
 			if (m.groups) {
 				const name = m.groups.name;
@@ -247,7 +234,8 @@ export function getPartsOfLine(lineStr: string): {
  * @param str string to remove quotes
  * @returns string without quotes
  */
-export function removeStringQuote(str: string): string {
+export function removeStringQuote(str: string | null): string | null {
+	if (str === null) return str;
 	if (str.startsWith('"') && str.endsWith('"')) {
 		return str.slice(1, -1);
 	} else if (str.startsWith("'") && str.endsWith("'")) {

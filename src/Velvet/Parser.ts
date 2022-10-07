@@ -1,4 +1,4 @@
-import { getBlockAttrOf, getBlocksOf, getRegexOf } from "./Tools.js";
+import { getAttributesOf, getBlocksOf, getRegexOf } from "./Tools.js";
 import { AST, TempBlock, VNode } from "./Types/AST.js";
 
 /**
@@ -22,16 +22,22 @@ export default class Parser {
 			/* c8 ignore next */
 			const res = getRegexOf(Parser.lineRegex, block.line) ?? "";
 			if (res.tag) {
-				const { current_block, attributes } = getBlockAttrOf(
-					block.block
-				);
-				const children = this.blockToAST(current_block, indent + 1);
+				const hasLineContent = res.line_content?.trim().length > 0;
+				let attributes = {};
+				if (hasLineContent) {
+					const { line: c_line, attributes: c_attrs } =
+						getAttributesOf(res?.line_content.trim());
+					if (Object.keys(c_attrs).length > 0) {
+						res.line_content = c_line;
+						attributes = c_attrs;
+					}
+				}
+				const children = this.blockToAST(block.block, indent + 1);
 				const current: VNode = {
 					tag: res.tag,
-					children:
-						res.line_content?.trim().length > 0
-							? [res.line_content, ...children]
-							: children,
+					children: hasLineContent
+						? [res.line_content, ...children]
+						: children,
 					indent,
 				};
 				if (Object.keys(attributes).length > 0)
