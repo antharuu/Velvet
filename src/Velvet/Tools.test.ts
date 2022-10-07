@@ -8,6 +8,7 @@ import {
 	getRegexOf,
 	getTabRegex,
 	removeIndentOf,
+	removeStringQuote,
 } from "./Tools";
 import { BlockAttr, TempBlock } from "./Types/AST";
 
@@ -155,7 +156,7 @@ test("Should return attributes", () => {
 	} as BlockAttr);
 });
 
-test("Should return attributes", () => {
+test.todo("Should return attributes", () => {
 	expect(getAttributesOf("(disabled) Hello world")).toStrictEqual({
 		line: "Hello world",
 		attributes: {
@@ -191,4 +192,12 @@ test("Should return the pats of line", () => {
 		attributes:
 			"disabled href='www.google.com' alt='Test (enfin je crois)'",
 	});
+});
+
+test.only("Should remove quotes froms string", () => {
+	expect(removeStringQuote("Test string")).toBe("Test string");
+	expect(removeStringQuote("'Test string'")).toBe("Test string");
+	expect(removeStringQuote('"Test \'string"')).toBe("Test 'string");
+	expect(removeStringQuote('"Test string')).toBe('"Test string');
+	expect(removeStringQuote("'Test string")).toBe("'Test string");
 });

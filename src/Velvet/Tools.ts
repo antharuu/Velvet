@@ -174,7 +174,25 @@ export function getAttributesOf(lineStr: string): {
 
 	const { line, attributes } = getPartsOfLine(lineStr);
 
-	if (attributes.length === 0) {
+	if (attributes.length > 0) {
+		// Split with regex this attributes "disabled href='www.google.com' alt='Test (enfin je crois)'"
+		const attrRegex =
+			/(?<name>[a-zA-Z0-9-]+)(?:\s*=\s*(?<value>"([^"]*)"|'([^']*)'|([^'"\s]+)))?/g;
+		let m: RegExpExecArray | null;
+		while ((m = attrRegex.exec(attributes)) !== null) {
+			if (m.index === attrRegex.lastIndex) {
+				attrRegex.lastIndex++;
+			}
+
+			console.log(m);
+
+			if (m.groups) {
+				const name = m.groups.name;
+				const value = m.groups.value ?? null;
+				attributesObj[name] = removeStringQuote(value);
+			}
+		}
+
 		return { line, attributes: attributesObj };
 	}
 
@@ -212,11 +230,28 @@ export function getPartsOfLine(lineStr: string): {
 					attributes: lineStr
 						.slice(0, i + 1)
 						.replace(/^\(/, "")
-						.replace(/\)$/, ""),
+						.replace(/\)$/, "")
+						.trim(),
 				};
 			}
 		}
 	}
 
 	return { line, attributes };
+}
+
+/**
+ * Remove quotes from strings
+ * Remove only if surrounded by same quotes
+ *
+ * @param str string to remove quotes
+ * @returns string without quotes
+ */
+export function removeStringQuote(str: string): string {
+	if (str.startsWith('"') && str.endsWith('"')) {
+		return str.slice(1, -1);
+	} else if (str.startsWith("'") && str.endsWith("'")) {
+		return str.slice(1, -1);
+	}
+	return str;
 }
