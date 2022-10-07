@@ -1,4 +1,4 @@
-import { BlockAttr, TempBlock } from "./Types/AST.js";
+import { BlockAttr, TempBlock, VAttributes } from "./Types/AST.js";
 import { DefaultConfig, TabSize } from "./Types/Config.js";
 import VelvetConfig from "./VelvetConfig.js";
 
@@ -41,6 +41,7 @@ export function getIndentOf(
  */
 export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 	let lines: string[] = [];
+	const attributes: VAttributes[] = [];
 
 	if (Array.isArray(velvetCode)) {
 		lines = velvetCode;
@@ -55,9 +56,17 @@ export function getBlocksOf(velvetCode: string | string[]): TempBlock[] {
 
 	function currentBlockEnd(): void {
 		if (mainLine.trim().length > 0) {
+			const c_block = getBlocksOf(removeIndentOf(current_block));
+
+			// Get Html attributes from line
+			const attr = getAttributesOf(mainLine);
+			if (attr) {
+				attributes.push(attr);
+			}
+
 			blocks.push({
 				line: mainLine.replace(/^(\s*)/, ""),
-				block: getBlocksOf(removeIndentOf(current_block)),
+				block: c_block,
 			});
 		}
 		mainLine = "";
@@ -149,5 +158,66 @@ export function getRegexOf(
 }
 
 export function getBlockAttrOf(block: TempBlock[]): BlockAttr {
-	return {current_block: block, attributes: {}};
+	return { current_block: block, attributes: {} };
+}
+
+/**
+ * Get attributes from line
+ *
+ * @param line line to get attributes
+ * @returns attributes
+ */
+export function getAttributesOf(lineStr: string): {
+	line: string;
+	attributes: VAttributes;
+} {
+	const attributesObj: VAttributes = {};
+
+	const { line, attributes } = getPartsOfLine(lineStr);
+
+	if (attributes.length === 0) {
+		return { line, attributes: attributesObj };
+	}
+
+	return {
+		line: line.replace(attributes, "").replace(/^ */, ""),
+		attributes: attributesObj,
+	};
+}
+
+/**
+ * Get parts of line
+ *
+ * @param lineStr line to get parts
+ * @returns parts
+ */
+export function getPartsOfLine(lineStr: string): {
+	line: string;
+	attributes: string;
+} {
+	const line = "",
+		attributes = "";
+	if (lineStr.startsWith("(")) {
+		let parenthesis = 0;
+		for (let i = 0; i < lineStr.length; i++) {
+			const char = lineStr[i];
+			if (char === "(") {
+				parenthesis++;
+			} else if (char === ")") {
+				parenthesis--;
+			}
+
+			if (parenthesis === 0) {
+				return {
+					line: lineStr.slice(i + 1).replace(/^ */, ""),
+					attributes: lineStr
+						.slice(0, i + 1)
+						.replace(/^\(/, "")
+						.replace(/\)$/, ""),
+				};
+			}
+		}
+	}
+
+	return { line, attributes };
 }
