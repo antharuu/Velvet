@@ -126,7 +126,7 @@ h2 But
 	] as AST);
 });
 
-test.only("Should work with simple empty attributes", () => {
+test("Should work with simple empty attributes", () => {
 	expect(
 		Parser.blockToAST(getBlocksOf("h1(disabled) Hello world"))
 	).toStrictEqual([
