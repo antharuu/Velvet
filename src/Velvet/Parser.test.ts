@@ -139,4 +139,23 @@ test.only("Should work with simple empty attributes", () => {
 			indent: 0,
 		},
 	] as AST);
+
+	expect(
+		Parser.blockToAST(
+			getBlocksOf(
+				"h1(disabled href='www.google.com' alt='Test (enfin je crois)') Hello world"
+			)
+		)
+	).toStrictEqual([
+		{
+			tag: "h1",
+			children: ["Hello world"],
+			attributes: {
+				disabled: null,
+				alt: "Test (enfin je crois)",
+				href: "www.google.com",
+			},
+			indent: 0,
+		},
+	] as AST);
 });
