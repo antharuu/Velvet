@@ -56,12 +56,13 @@ Simple examples
 
 ```pug
 h1 Hello world
-
 // <h1>Hello world</h1>
 
 
 h1 Hello
   span world
-
 // <h1>Hello <span>world</span></h1>
+
+h1(data-test="title") Hello world
+// <h1 data-test="title">Hello world</h1>
 ```

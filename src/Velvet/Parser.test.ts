@@ -126,13 +126,36 @@ h2 But
 	] as AST);
 });
 
-test.todo("Should work with attributes", () => {
-	expect(Parser.blockToAST(getBlocksOf("h1(disabled) Hello world"))).toStrictEqual([{
-		tag: "h1",
-		children: ["Hello world"],
-		attributes: {
-			disabled: null
+test("Should work with simple empty attributes", () => {
+	expect(
+		Parser.blockToAST(getBlocksOf("h1(disabled) Hello world"))
+	).toStrictEqual([
+		{
+			tag: "h1",
+			children: ["Hello world"],
+			attributes: {
+				disabled: null,
+			},
+			indent: 0,
 		},
-		indent: 0
-	}] as AST);
+	] as AST);
+
+	expect(
+		Parser.blockToAST(
+			getBlocksOf(
+				"h1(disabled href='www.google.com' alt='Test (enfin je crois)') Hello world"
+			)
+		)
+	).toStrictEqual([
+		{
+			tag: "h1",
+			children: ["Hello world"],
+			attributes: {
+				disabled: null,
+				alt: "Test (enfin je crois)",
+				href: "www.google.com",
+			},
+			indent: 0,
+		},
+	] as AST);
 });

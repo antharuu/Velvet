@@ -1,13 +1,15 @@
 import {
-	getBlockAttrOf,
+	getAttributesOf,
 	getBlocksOf,
 	getIndentOf,
 	getLinesOf,
+	getPartsOfLine,
 	getRegexOf,
 	getTabRegex,
 	removeIndentOf,
+	removeStringQuote,
 } from "./Tools";
-import { BlockAttr, TempBlock } from "./Types/AST";
+import { TempBlock } from "./Types/AST";
 
 describe("Indentation", () => {
 	test("With tabsize: tab", () => {
@@ -137,16 +139,48 @@ test("Get empty object for invalid line or regex", () => {
 	expect(getRegexOf(/^([\w]+) ?(.*)/, "")).toStrictEqual({});
 });
 
-test.todo("Should return attributes", () => {
-	expect(getBlockAttrOf(getBlocksOf("h1(disabled) Hello world"))).toStrictEqual({
-		current_block: [
-			{
-				line: "Hello world",
-				block: []
-			}
-		],
+test("Should return attributes", () => {
+	expect(getAttributesOf("(disabled) Hello world")).toStrictEqual({
+		line: "Hello world",
 		attributes: {
-			disabled: null
-		}
-	} as BlockAttr);
+			disabled: null,
+		},
+	});
+
+	expect(
+		getAttributesOf(
+			"(href='www.google.com' alt='This is google') Hello world"
+		)
+	).toStrictEqual({
+		line: "Hello world",
+		attributes: {
+			href: "www.google.com",
+			alt: "This is google",
+		},
+	});
+});
+
+test("Should return the pats of line", () => {
+	expect(getPartsOfLine("(disabled) Hello world")).toStrictEqual({
+		line: "Hello world",
+		attributes: "disabled",
+	});
+
+	expect(
+		getPartsOfLine(
+			"(disabled href='www.google.com' alt='Test (enfin je crois)') Hello world"
+		)
+	).toStrictEqual({
+		line: "Hello world",
+		attributes:
+			"disabled href='www.google.com' alt='Test (enfin je crois)'",
+	});
+});
+
+test("Should remove quotes froms string", () => {
+	expect(removeStringQuote("Test string")).toBe("Test string");
+	expect(removeStringQuote("'Test string'")).toBe("Test string");
+	expect(removeStringQuote('"Test \'string"')).toBe("Test 'string");
+	expect(removeStringQuote('"Test string')).toBe('"Test string');
+	expect(removeStringQuote("'Test string")).toBe("'Test string");
 });

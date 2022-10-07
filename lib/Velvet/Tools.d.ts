@@ -1,4 +1,4 @@
-import { BlockAttr, TempBlock } from "./Types/AST.js";
+import { TempBlock, VAttributes } from "./Types/AST.js";
 import { TabSize } from "./Types/Config.js";
 /**
  * Get indent from line
@@ -44,5 +44,31 @@ export declare function getTabRegex(forceTabSize?: TabSize | undefined): RegExp;
 export declare function getRegexOf(regex: RegExp, string: string): {
     [key: string]: string;
 };
-export declare function getBlockAttrOf(block: TempBlock[]): BlockAttr;
+/**
+ * Get attributes from line
+ * @param lineStr line to get attributes
+ * @returns attributes
+ */
+export declare function getAttributesOf(lineStr: string): {
+    line: string;
+    attributes: VAttributes;
+};
+/**
+ * Get parts of line
+ *
+ * @param lineStr line to get parts
+ * @returns parts
+ */
+export declare function getPartsOfLine(lineStr: string): {
+    line: string;
+    attributes: string;
+};
+/**
+ * Remove quotes from strings
+ * Remove only if surrounded by same quotes
+ *
+ * @param str string to remove quotes
+ * @returns string without quotes
+ */
+export declare function removeStringQuote(str: string | null): string | null;
 //# sourceMappingURL=Tools.d.ts.map

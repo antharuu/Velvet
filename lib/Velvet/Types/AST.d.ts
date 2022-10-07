@@ -10,10 +10,6 @@ export declare type VTag = {
 export declare type VAttributes = {
     [key: string]: string | string[] | number | number[] | null;
 };
-export declare type BlockAttr = {
-    current_block: TempBlock[];
-    attributes: VAttributes;
-};
 export declare type TempBlock = {
     line: string;
     block: TempBlock[];

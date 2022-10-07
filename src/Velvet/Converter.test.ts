@@ -61,3 +61,28 @@ test("Get from tag", () => {
 		})
 	).toEqual("");
 });
+
+test("Get with attributes", () => {
+	expect(
+		Converter.getHtmlFromLine({
+			tag: "h1",
+			children: ["Hello world"],
+			attributes: {
+				disabled: null,
+			},
+			indent: 0,
+		})
+	).toEqual("<h1 disabled>Hello world</h1>");
+
+	expect(
+		Converter.getHtmlFromLine({
+			tag: "h1",
+			children: ["Hello world"],
+			attributes: {
+				disabled: null,
+				"aria-label": "Hello world",
+			},
+			indent: 0,
+		})
+	).toEqual('<h1 disabled aria-label="Hello world">Hello world</h1>');
+});
