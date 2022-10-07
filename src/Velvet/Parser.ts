@@ -22,7 +22,9 @@ export default class Parser {
 			/* c8 ignore next */
 			const res = getRegexOf(Parser.lineRegex, block.line) ?? "";
 			if (res.tag) {
-				const {current_block, attributes} = getBlockAttrOf(block.block);
+				const { current_block, attributes } = getBlockAttrOf(
+					block.block
+				);
 				const children = this.blockToAST(current_block, indent + 1);
 				const current: VNode = {
 					tag: res.tag,
@@ -32,7 +34,8 @@ export default class Parser {
 							: children,
 					indent,
 				};
-				if(Object.keys(attributes).length > 0) current.attributes = attributes;
+				if (Object.keys(attributes).length > 0)
+					current.attributes = attributes;
 				ast.push(current);
 			}
 		});

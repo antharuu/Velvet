@@ -127,12 +127,16 @@ h2 But
 });
 
 test.todo("Should work with attributes", () => {
-	expect(Parser.blockToAST(getBlocksOf("h1(disabled) Hello world"))).toStrictEqual([{
-		tag: "h1",
-		children: ["Hello world"],
-		attributes: {
-			disabled: null
+	expect(
+		Parser.blockToAST(getBlocksOf("h1(disabled) Hello world"))
+	).toStrictEqual([
+		{
+			tag: "h1",
+			children: ["Hello world"],
+			attributes: {
+				disabled: null,
+			},
+			indent: 0,
 		},
-		indent: 0
-	}] as AST);
+	] as AST);
 });

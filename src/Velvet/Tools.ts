@@ -163,8 +163,7 @@ export function getBlockAttrOf(block: TempBlock[]): BlockAttr {
 
 /**
  * Get attributes from line
- *
- * @param line line to get attributes
+ * @param lineStr line to get attributes
  * @returns attributes
  */
 export function getAttributesOf(lineStr: string): {

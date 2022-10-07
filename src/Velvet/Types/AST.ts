@@ -12,10 +12,10 @@ export type VTag = {
 };
 
 export type VAttributes = {
-	[key: string]: string | string[] | number | number[] | null
-}
+	[key: string]: string | string[] | number | number[] | null;
+};
 
-export type BlockAttr = {current_block: TempBlock[], attributes: VAttributes};
+export type BlockAttr = { current_block: TempBlock[]; attributes: VAttributes };
 
 export type TempBlock = {
 	line: string;

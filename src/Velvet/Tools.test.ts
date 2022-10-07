@@ -140,16 +140,18 @@ test("Get empty object for invalid line or regex", () => {
 });
 
 test("Should return attributes", () => {
-	expect(getBlockAttrOf(getBlocksOf("h1(disabled) Hello world"))).toStrictEqual({
+	expect(
+		getBlockAttrOf(getBlocksOf("h1(disabled) Hello world"))
+	).toStrictEqual({
 		current_block: [
 			{
 				line: "Hello world",
-				block: []
-			}
+				block: [],
+			},
 		],
 		attributes: {
-			disabled: null
-		}
+			disabled: null,
+		},
 	} as BlockAttr);
 });
 
@@ -157,16 +159,20 @@ test("Should return attributes", () => {
 	expect(getAttributesOf("(disabled) Hello world")).toStrictEqual({
 		line: "Hello world",
 		attributes: {
-			disabled: null
-		}
+			disabled: null,
+		},
 	});
 
-	expect(getAttributesOf("(href='www.google.com' alt='This is google') Hello world")).toStrictEqual({
+	expect(
+		getAttributesOf(
+			"(href='www.google.com' alt='This is google') Hello world"
+		)
+	).toStrictEqual({
 		line: "Hello world",
 		attributes: {
 			href: "www.google.com",
-			alt: "This is google"
-		}
+			alt: "This is google",
+		},
 	});
 });
 
@@ -176,9 +182,13 @@ test("Should return the pats of line", () => {
 		attributes: "disabled",
 	});
 
-	
-	expect(getPartsOfLine("(disabled href='www.google.com' alt='Test (enfin je crois)') Hello world")).toStrictEqual({
+	expect(
+		getPartsOfLine(
+			"(disabled href='www.google.com' alt='Test (enfin je crois)') Hello world"
+		)
+	).toStrictEqual({
 		line: "Hello world",
-		attributes: "disabled href='www.google.com' alt='Test (enfin je crois)'",
+		attributes:
+			"disabled href='www.google.com' alt='Test (enfin je crois)'",
 	});
 });
