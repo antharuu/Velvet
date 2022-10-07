@@ -19,10 +19,10 @@
 		"dev": "vite",
 		"build": "tsc",
 		"preview": "vite preview",
-		"test": "npx vitest --globals --sequence.shuffle --sequence.shuffle",
+		"test": "npx vitest --globals --sequence.shuffle",
 		"test:ui": "npm run test -- --ui",
 		"test:cover": "npm run test -- --coverage",
-		"test:once": "npx vitest run --globals --sequence.shuffle --sequence.shuffle",
+		"test:once": "npx vitest run --globals --sequence.shuffle",
 		"prod": "release-it --verbose",
 		"lint": "eslint src --fix",
 		"clean": "rm -rf node_modules"
